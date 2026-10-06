@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ROCK Voice Assistant</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; font-family: system-ui, sans-serif;
+      background: #071018; color: #eef7ff; display: grid; place-items: center;
+    }
+    .app {
+      width: min(92vw, 520px); padding: 24px; border: 1px solid #294154;
+      border-radius: 24px; background: #0c1720; box-shadow: 0 20px 60px #0008;
+    }
+    h1 { margin: 0 0 6px; font-size: 42px; letter-spacing: 4px; }
+    .sub { color: #9fb3c2; margin-bottom: 22px; }
+    .orb {
+      width: 150px; height: 150px; margin: 10px auto 24px; border-radius: 50%;
+      display: grid; place-items: center; font-size: 30px; font-weight: 800;
+      border: 2px solid #4ba3d3; background: radial-gradient(circle, #183e55, #08131b 68%);
+      box-shadow: 0 0 35px #168dcc55;
+    }
+    .orb.listening { animation: pulse 1s infinite; }
+    @keyframes pulse { 50% { transform: scale(1.05); box-shadow: 0 0 55px #36b8ff99; } }
+    select, input, button {
+      width: 100%; border-radius: 12px; border: 1px solid #385366;
+      background: #101f2a; color: #fff; padding: 13px; font-size: 16px;
+    }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+    button { cursor: pointer; font-weight: 700; }
+    button.primary { background: #126c9e; border-color: #36b8ff; }
+    button.stop { background: #7b2731; }
+    #status { min-height: 44px; margin: 16px 0 8px; color: #b9d9e8; }
+    #log { min-height: 80px; padding: 12px; border-radius: 12px; background: #071119; color: #a9bfcc; white-space: pre-wrap; }
+    .hint { margin-top: 12px; font-size: 13px; color: #8096a4; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <h1>ROCK</h1>
+    <div class="sub">Offline-first Hindi + English Voice Assistant</div>
+    <div id="orb" class="orb">R</div>
+
+    <select id="language" aria-label="Language">
+      <option value="hi-IN">हिन्दी</option>
+      <option value="en-US">English</option>
+    </select>
+
+    <input id="command" placeholder="कमांड लिखें / Type a command" autocomplete="off">
+
+    <div class="row">
+      <button class="primary" id="ask">Ask ROCK</button>
+      <button id="listen">🎙️ Start Listening</button>
+    </div>
+    <button class="stop" id="stop" style="margin-top:10px">Stop</button>
+
+    <div id="status">तैयार हूँ। / Ready.</div>
+    <div id="log">ROCK: नमस्ते! मैं तैयार हूँ।</div>
+
+    <div class="hint">
+      उदाहरण: “समय बताओ”, “तारीख बताओ”, “Google खोलो”, “YouTube खोलो”,
+      “Hello ROCK”, “What time is it?”
+    </div>
+  </main>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const lang = $("language"), input = $("command"), status = $("status");
+  const log = $("log"), orb = $("orb");
+  let recognition = null, speaking = false;
+
+  function clean(s) {
+    return s.toLowerCase().normalize("NFKC")
+      .replace(/[\\u200B-\\u200D\\uFEFF]/g, "").trim();
+  }
+
+  function say(text) {
+    if (!("speechSynthesis" in window)) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang.value;
+    u.rate = 0.95;
+    u.pitch = 1;
+    speaking = true;
+    u.onend = () => speaking = false;
+    speechSynthesis.speak(u);
+  }
+
+  function show(user, reply) {
+    log.textContent = `You: ${user}\nROCK: ${reply}`;
+    status.textContent = reply;
+  }
+
+  function runCommand(raw) {
+    const q = clean(raw);
+    if (!q) return;
+
+    let reply = "";
+    if (/(hello|hi|hey|नमस्ते|हेलो|हाय|जार्विस|रॉक)/i.test(q)) {
+      reply = lang.value === "hi-IN" ? "नमस्ते! मैं ROCK हूँ।" : "Hello! I am ROCK.";
+    } else if (/(समय|टाइम|time|what time)/i.test(q)) {
+      const now = new Date();
+      reply = lang.value === "hi-IN"
+        ? `अभी समय ${now.toLocaleTimeString("hi-IN", {hour:"2-digit", minute:"2-digit"})} है।`
+        : `The time is ${now.toLocaleTimeString("en-US", {hour:"2-digit", minute:"2-digit"})}.`;
+    } else if (/(तारीख|डेट|date|today)/i.test(q)) {
+      const now = new Date();
+      reply = lang.value === "hi-IN"
+        ? `आज ${now.toLocaleDateString("hi-IN", {day:"numeric", month:"long", year:"numeric"})} है।`
+        : `Today is ${now.toLocaleDateString("en-US", {day:"numeric", month:"long", year:"numeric"})}.`;
+    } else if (/(google|गूगल)/i.test(q)) {
+      window.open("https://www.google.com/", "_blank", "noopener");
+      reply = lang.value === "hi-IN" ? "Google खोल रहा हूँ।" : "Opening Google.";
+    } else if (/(youtube|यूट्यूब)/i.test(q)) {
+      window.open("https://www.youtube.com/", "_blank", "noopener");
+      reply = lang.value === "hi-IN" ? "YouTube खोल रहा हूँ।" : "Opening YouTube.";
+    } else if (/(stop|रुको|बंद|चुप)/i.test(q)) {
+      speechSynthesis.cancel();
+      reply = lang.value === "hi-IN" ? "ठीक है।" : "Okay.";
+    } else {
+      reply = lang.value === "hi-IN"
+        ? "यह कमांड अभी मेरी local command list में नहीं है।"
+        : "That command is not in my local command list yet.";
+    }
+
+    show(raw, reply);
+    say(reply);
+  }
+
+  $("ask").onclick = () => runCommand(input.value);
+  input.addEventListener("keydown", e => { if (e.key === "Enter") runCommand(input.value); });
+
+  $("stop").onclick = () => {
+    if (recognition) try { recognition.abort(); } catch {}
+    speechSynthesis.cancel();
+    orb.classList.remove("listening");
+    status.textContent = lang.value === "hi-IN" ? "रोक दिया।" : "Stopped.";
+  };
+
+  $("listen").onclick = () => {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) {
+      status.textContent = lang.value === "hi-IN"
+        ? "इस ब्राउज़र में voice recognition उपलब्ध नहीं है। Chrome में कोशिश करें।"
+        : "Voice recognition is not available in this browser. Try Chrome.";
+      return;
+    }
+
+    if (recognition) try { recognition.abort(); } catch {}
+    recognition = new SR();
+    recognition.lang = lang.value;
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onstart = () => {
+      orb.classList.add("listening");
+      status.textContent = lang.value === "hi-IN" ? "सुन रहा हूँ..." : "Listening...";
+    };
+    recognition.onresult = e => {
+      const text = e.results[0][0].transcript;
+      input.value = text;
+      runCommand(text);
+    };
+    recognition.onerror = e => {
+      orb.classList.remove("listening");
+      status.textContent = lang.value === "hi-IN"
+        ? `माइक समस्या: ${e.error}`
+        : `Mic error: ${e.error}`;
+    };
+    recognition.onend = () => orb.classList.remove("listening");
+
+    try { recognition.start(); }
+    catch { status.textContent = lang.value === "hi-IN" ? "माइक शुरू नहीं हो सका।" : "Could not start microphone."; }
+  };
+
+  lang.onchange = () => {
+    status.textContent = lang.value === "hi-IN" ? "हिन्दी मोड तैयार है।" : "English mode ready.";
+  };
+})();
+</script>
+</body>
+</html>
