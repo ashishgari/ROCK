@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALIS Assistant</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 25px 12px;
+  background: #101827;
+  color: white;
+}
+button {
+  padding: 14px 20px;
+  margin: 10px;
+  border: 0;
+  border-radius: 12px;
+  font-size: 17px;
+  background: #16a085;
+  color: white;
+}
+#result {
+  margin: 20px auto;
+  padding: 15px;
+  max-width: 450px;
+  min-height: 50px;
+  background: #263449;
+  border-radius: 10px;
+  overflow-wrap: anywhere;
+}
+</style>
+</head>
+<body>
+
+<h1>🤖 ALIS</h1>
+<p>नमस्ते! मैं आपकी AI सहायक ALIS हूँ।</p>
+
+<button onclick="speak()">🔊 ALIS से बात सुनें</button>
+<button onclick="listen()">🎙️ बोलकर पूछें</button>
+
+<div id="result">आपकी बात यहाँ दिखाई देगी।</div>
+
+<script>
+const result = document.getElementById("result");
+
+function speak() {
+  if (!("speechSynthesis" in window)) {
+    result.textContent = "इस ब्राउज़र में आवाज़ की सुविधा नहीं है।";
+    return;
+  }
+  speechSynthesis.cancel();
+  const msg = new SpeechSynthesisUtterance(
+    "नमस्ते! मैं एलिस हूँ। बताइए, मैं आपकी क्या मदद करूँ?"
+  );
+  msg.lang = "hi-IN";
+  speechSynthesis.speak(msg);
+}
+
+function listen() {
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    result.textContent =
+      "आपके ब्राउज़र में आवाज़ पहचानने की सुविधा उपलब्ध नहीं है।";
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = "hi-IN";
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  result.textContent = "सुन रही हूँ... अब बोलिए।";
+
+  recognition.onresult = function(event) {
+    result.textContent = "आपने कहा: " +
+      event.results[0][0].transcript;
+  };
+
+  recognition.onerror = function(event) {
+    result.textContent = "माइक्रोफ़ोन त्रुटि: " + event.error;
+  };
+
+  recognition.onend = function() {
+    console.log("ALIS सुनना बंद कर चुकी है।");
+  };
+
+  try {
+    recognition.start();
+  } catch (error) {
+    result.textContent = "त्रुटि: " + error.message;
+  }
+}
+</script>
+
+</body>
+</html>
