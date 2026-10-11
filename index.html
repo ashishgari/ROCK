@@ -2,371 +2,380 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ALIS Voice Assistant</title>
 
 <style>
-* { box-sizing: border-box; }
-
 body {
   margin: 0;
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
+  padding: 20px;
   background: #071018;
-  color: #eef7ff;
-  font-family: Arial, sans-serif;
-}
-
-.app {
-  width: 92%;
-  max-width: 520px;
-  padding: 24px;
-  border: 1px solid #294154;
-  border-radius: 24px;
-  background: #0c1720;
-}
-
-h1 {
-  text-align: center;
-  font-size: 42px;
-  letter-spacing: 5px;
-  margin-bottom: 5px;
-}
-
-.sub {
-  text-align: center;
-  color: #9fb3c2;
-}
-
-.orb {
-  width: 140px;
-  height: 140px;
-  margin: 25px auto;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 42px;
-  font-weight: bold;
-  background: radial-gradient(circle, #183e55, #08131b);
-  border: 2px solid #36b8ff;
-}
-
-.listening {
-  animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-  50% { transform: scale(1.05); }
-}
-
-select, input, button {
-  width: 100%;
-  padding: 13px;
-  margin-top: 10px;
-  border-radius: 12px;
-  border: 1px solid #385366;
-  background: #101f2a;
   color: white;
-  font-size: 16px;
+  font-family: Arial, sans-serif;
+  text-align: center;
 }
-
-.row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+.container {
+  max-width: 520px;
+  margin: 30px auto;
+  padding: 25px;
+  background: #102231;
+  border-radius: 20px;
 }
-
+h1 { color: #55d6ff; font-size: 38px; }
+p { line-height: 1.6; }
 button {
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.primary {
-  background: #126c9e;
-}
-
-.stop {
-  background: #7b2731;
-}
-
-#status {
-  margin-top: 18px;
-  min-height: 40px;
-  color: #b9d9e8;
-}
-
-#log {
-  white-space: pre-wrap;
-  padding: 12px;
-  background: #071119;
+  display: block;
+  width: 100%;
+  margin: 12px 0;
+  padding: 15px;
+  border: none;
   border-radius: 12px;
+  background: #00a8e8;
+  color: white;
+  font-size: 17px;
+}
+button:active { background: #0077aa; }
+#status {
+  color: #8feaff;
+  overflow-wrap: anywhere;
+}
+#answer {
+  margin-top: 20px;
+  padding: 12px;
+  background: #071018;
+  border-radius: 12px;
+  min-height: 45px;
+  line-height: 1.6;
   overflow-wrap: anywhere;
 }
 </style>
 </head>
 
 <body>
-<main class="app">
+<div class="container">
+  <h1>ALIS</h1>
+  <p>आपका हिंदी वॉइस असिस्टेंट</p>
 
-<h1>ALIS</h1>
-<div class="sub">Hindi Voice Assistant</div>
+  <button id="listenBtn">🎙️ बोलिए — ALIS सुन रहा है</button>
+  <button id="stopBtn">⏹️ आवाज़ बंद करें</button>
 
-<div id="orb" class="orb">A</div>
-
-<select id="language">
-  <option value="hi-IN">हिन्दी</option>
-  <option value="en-US">English</option>
-</select>
-
-<input id="command"
-       placeholder="कमांड लिखें या बोलें">
-
-<div class="row">
-  <button class="primary" id="ask">ALIS से पूछें</button>
-  <button id="listen">🎙️ बोलिए</button>
+  <p id="status">शुरू करने के लिए बटन दबाएँ।</p>
+  <div id="answer">नमस्ते! मैं ALIS हूँ।</div>
 </div>
 
-<button class="stop" id="stop">रोकें</button>
-
-<div id="status">नमस्ते! मैं ALIS हूँ।</div>
-<div id="log">ALIS: मैं आपकी मदद के लिए तैयार हूँ।</div>
-
-<p>
-उदाहरण: समय बताओ, तारीख बताओ,
-Google खोलो, YouTube खोलो।
-</p>
-
 <script>
-(() => {
-  const $ = id => document.getElementById(id);
+const statusBox = document.getElementById("status");
+const answerBox = document.getElementById("answer");
+const listenBtn = document.getElementById("listenBtn");
+const stopBtn = document.getElementById("stopBtn");
 
-  const lang = $("language");
-  const input = $("command");
-  const status = $("status");
-  const log = $("log");
-  const orb = $("orb");
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
 
-  let recognition = null;
+let recognition = null;
+let listening = false;
+let speaking = false;
 
-  function clean(text) {
-    return text.toLowerCase().trim();
+function speak(text) {
+  answerBox.textContent = text;
+
+  if (!("speechSynthesis" in window)) {
+    statusBox.textContent = "आपका ब्राउज़र आवाज़ में जवाब नहीं दे सकता।";
+    return;
   }
 
-  function say(text) {
-    if (!("speechSynthesis" in window)) {
-      status.textContent = text;
-      return;
-    }
+  speaking = true;
+  window.speechSynthesis.cancel();
 
-    speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "hi-IN";
+  utterance.rate = 0.95;
+  utterance.pitch = 1;
 
-    const voice = new SpeechSynthesisUtterance(text);
-    voice.lang = lang.value;
-    voice.rate = 0.95;
-
-    speechSynthesis.speak(voice);
-  }
-
-  function show(command, reply) {
-    log.textContent =
-      "आप: " + command + "\nALIS: " + reply;
-
-    status.textContent = reply;
-  }
-
-  function openApp(app) {
-    let intentURL = "";
-
-    if (app === "youtube") {
-      intentURL =
-        "intent://www.youtube.com/#Intent;" +
-        "scheme=https;" +
-        "package=com.google.android.youtube;" +
-        "S.browser_fallback_url=https%3A%2F%2Fwww.youtube.com%2F;" +
-        "end";
-    } else if (app === "google") {
-      intentURL =
-        "intent://www.google.com/#Intent;" +
-        "scheme=https;" +
-        "package=com.google.android.googlequicksearchbox;" +
-        "S.browser_fallback_url=https%3A%2F%2Fwww.google.com%2F;" +
-        "end";
-    }
-
-    if (!intentURL) return;
-
-    // ऐप खोलने की कोशिश सीधे यूज़र के कमांड पर होगी।
-    window.location.href = intentURL;
-  }
-
-  function runCommand(raw) {
-    const q = clean(raw);
-
-    if (!q) return;
-
-    let reply = "";
-
-    if (
-      /(youtube|यूट्यूब)/i.test(q) &&
-      /(खोल|open|chalao|चलाओ)/i.test(q)
-    ) {
-      reply = lang.value === "hi-IN"
-        ? "YouTube ऐप खोलने की कोशिश कर रहा हूँ।"
-        : "Trying to open YouTube.";
-
-      show(raw, reply);
-      say(reply);
-      openApp("youtube");
-      return;
-    }
-
-    if (
-      /(google|गूगल)/i.test(q) &&
-      /(खोल|open|chalao|चलाओ)/i.test(q)
-    ) {
-      reply = lang.value === "hi-IN"
-        ? "Google ऐप खोलने की कोशिश कर रहा हूँ।"
-        : "Trying to open Google.";
-
-      show(raw, reply);
-      say(reply);
-      openApp("google");
-      return;
-    }
-
-    if (
-      /(समय|टाइम|time|what time)/i.test(q)
-    ) {
-      const now = new Date();
-
-      reply = lang.value === "hi-IN"
-        ? "अभी समय " +
-          now.toLocaleTimeString("hi-IN", {
-            hour: "2-digit",
-            minute: "2-digit"
-          }) + " है।"
-        : "The time is " +
-          now.toLocaleTimeString("en-US", {
-            hour: "2-digit",
-            minute: "2-digit"
-          });
-
-    } else if (
-      /(तारीख|डेट|date|today)/i.test(q)
-    ) {
-      reply = lang.value === "hi-IN"
-        ? "आज " +
-          new Date().toLocaleDateString("hi-IN", {
-            day: "numeric",
-            month: "long",
-            year: "numeric"
-          }) + " है।"
-        : "Today is " +
-          new Date().toLocaleDateString("en-US");
-
-    } else if (
-      /(नमस्ते|हेलो|hello|hi|hey)/i.test(q)
-    ) {
-      reply = lang.value === "hi-IN"
-        ? "नमस्ते! मैं ALIS हूँ। बताइए, आपकी क्या मदद करूँ?"
-        : "Hello! I am ALIS. How can I help you?";
-
-    } else if (
-      /(रुको|बंद|चुप|stop)/i.test(q)
-    ) {
-      speechSynthesis.cancel();
-      reply = lang.value === "hi-IN"
-        ? "ठीक है, मैंने बोलना रोक दिया।"
-        : "Okay, I stopped speaking.";
-
-    } else {
-      reply = lang.value === "hi-IN"
-        ? "माफ़ कीजिए, यह कमांड अभी मुझे समझ नहीं आई।"
-        : "Sorry, I did not understand that command.";
-    }
-
-    show(raw, reply);
-    say(reply);
-  }
-
-  $("ask").onclick = () => runCommand(input.value);
-
-  input.addEventListener("keydown", event => {
-    if (event.key === "Enter") {
-      runCommand(input.value);
-    }
-  });
-
-  $("listen").onclick = () => {
-    const SpeechRecognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      status.textContent =
-        "इस ब्राउज़र में आवाज़ पहचानने की सुविधा उपलब्ध नहीं है।";
-      return;
-    }
-
-    if (recognition) {
-      try { recognition.abort(); } catch (e) {}
-    }
-
-    recognition = new SpeechRecognition();
-    recognition.lang = lang.value;
-    recognition.continuous = false;
-    recognition.interimResults = false;
-
-    recognition.onstart = () => {
-      orb.classList.add("listening");
-      status.textContent = "ALIS सुन रहा है...";
-    };
-
-    recognition.onresult = event => {
-      const spoken = event.results[0][0].transcript;
-      input.value = spoken;
-      runCommand(spoken);
-    };
-
-    recognition.onerror = event => {
-      status.textContent =
-        "माइक्रोफ़ोन समस्या: " + event.error;
-    };
-
-    recognition.onend = () => {
-      orb.classList.remove("listening");
-    };
-
-    try {
-      recognition.start();
-    } catch (e) {
-      status.textContent =
-        "माइक्रोफ़ोन शुरू नहीं हो सका।";
-    }
+  utterance.onend = () => {
+    speaking = false;
   };
 
-  $("stop").onclick = () => {
-    if (recognition) {
-      try { recognition.abort(); } catch (e) {}
-    }
-
-    if ("speechSynthesis" in window) {
-      speechSynthesis.cancel();
-    }
-
-    orb.classList.remove("listening");
-    status.textContent = "ALIS रुक गया है।";
+  utterance.onerror = () => {
+    speaking = false;
   };
 
-  lang.onchange = () => {
-    status.textContent =
-      lang.value === "hi-IN"
-        ? "हिन्दी मोड तैयार है।"
-        : "English mode ready.";
+  window.speechSynthesis.speak(utterance);
+}
+
+function getDayName(date) {
+  const days = [
+    "रविवार", "सोमवार", "मंगलवार", "बुधवार",
+    "गुरुवार", "शुक्रवार", "शनिवार"
+  ];
+  return days[date.getDay()];
+}
+
+function getDateText() {
+  const now = new Date();
+  const months = [
+    "जनवरी", "फ़रवरी", "मार्च", "अप्रैल",
+    "मई", "जून", "जुलाई", "अगस्त",
+    "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"
+  ];
+
+  return `आज ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()} है।`;
+}
+
+function calculate(text) {
+  let s = text.toLowerCase()
+    .replace(/×/g, "*")
+    .replace(/x/g, "*")
+    .replace(/÷/g, "/")
+    .replace(/plus/g, "+")
+    .replace(/minus/g, "-")
+    .replace(/into/g, "*")
+    .replace(/multiplied by/g, "*")
+    .replace(/divided by/g, "/")
+    .replace(/जमा/g, "+")
+    .replace(/जोड़ो/g, "+")
+    .replace(/जोड़/g, "+")
+    .replace(/प्लस/g, "+")
+    .replace(/घटाओ/g, "-")
+    .replace(/घटा/g, "-")
+    .replace(/माइनस/g, "-")
+    .replace(/गुणा/g, "*")
+    .replace(/गुना/g, "*")
+    .replace(/भाग/g, "/")
+    .replace(/बटा/g, "/")
+    .replace(/कितना होता है/g, "")
+    .replace(/कितना है/g, "")
+    .replace(/कितना होगा/g, "")
+    .replace(/का/g, "")
+    .replace(/है/g, "")
+    .replace(/बताओ/g, "")
+    .replace(/कैलकुलेट/g, "")
+    .replace(/[?=]/g, " ")
+    .trim();
+
+  const words = {
+    "शून्य":"0", "एक":"1", "दो":"2", "तीन":"3",
+    "चार":"4", "पाँच":"5", "पांच":"5", "छह":"6",
+    "सात":"7", "आठ":"8", "नौ":"9", "दस":"10",
+    "ग्यारह":"11", "बारह":"12", "तेरह":"13",
+    "चौदह":"14", "पंद्रह":"15", "सोलह":"16",
+    "सत्रह":"17", "अठारह":"18", "उन्नीस":"19",
+    "बीस":"20", "तीस":"30", "चालीस":"40",
+    "पचास":"50", "सौ":"100"
   };
-})();
+
+  for (const [word, number] of Object.entries(words)) {
+    s = s.replaceAll(word, number);
+  }
+
+  // गणना केवल सुरक्षित अंक और गणितीय चिह्नों से करें।
+  if (!/^[\d\s.+*/()-]+$/.test(s)) return null;
+
+  const parts = s.match(/(?:\d+(?:\.\d+)?|[()+*/-])/g);
+  if (!parts || parts.join("") !== s.replace(/\s/g, "")) return null;
+
+  try {
+    let i = 0;
+
+    function expression() {
+      let value = term();
+      while (parts[i] === "+" || parts[i] === "-") {
+        const op = parts[i++];
+        const right = term();
+        value = op === "+" ? value + right : value - right;
+      }
+      return value;
+    }
+
+    function term() {
+      let value = factor();
+      while (parts[i] === "*" || parts[i] === "/") {
+        const op = parts[i++];
+        const right = factor();
+        if (op === "/" && right === 0) throw Error("शून्य से भाग नहीं दे सकते।");
+        value = op === "*" ? value * right : value / right;
+      }
+      return value;
+    }
+
+    function factor() {
+      if (parts[i] === "-") {
+        i++;
+        return -factor();
+      }
+      if (parts[i] === "(") {
+        i++;
+        const value = expression();
+        if (parts[i++] !== ")") throw Error();
+        return value;
+      }
+      const value = Number(parts[i++]);
+      if (!Number.isFinite(value)) throw Error();
+      return value;
+    }
+
+    const result = expression();
+    if (i !== parts.length || !Number.isFinite(result)) return null;
+    return Number(result.toFixed(8)).toString();
+  } catch (e) {
+    if (e.message === "शून्य से भाग नहीं दे सकते।") throw e;
+    return null;
+  }
+}
+
+function runCommand(raw) {
+  const text = raw.toLowerCase()
+    .replace(/[।,!?]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!text) {
+    speak("मुझे आपकी बात सुनाई नहीं दी। कृपया फिर से बोलिए।");
+    return;
+  }
+
+  if (/\b(good morning|सुप्रभात)\b/.test(text)) {
+    speak("गुड मॉर्निंग! आपका दिन शुभ हो। मैं ALIS हूँ। बताइए, मैं आपकी क्या मदद करूँ?");
+    return;
+  }
+
+  if (text.includes("good evening") || text.includes("शुभ संध्या")) {
+    speak("गुड ईवनिंग! आपका स्वागत है। बताइए, मैं आपकी क्या मदद करूँ?");
+    return;
+  }
+
+  if (text.includes("good night") || text.includes("शुभ रात्रि")) {
+    speak("गुड नाइट! आपका दिन अच्छा बीते और रात आरामदायक हो।");
+    return;
+  }
+
+  if (text.includes("नमस्ते") || text.includes("नमस्कार") ||
+      text.includes("hello") || text.includes("hi ")) {
+    speak("नमस्ते! मैं ALIS हूँ। बताइए, मैं आपकी क्या मदद करूँ?");
+    return;
+  }
+
+  if (text.includes("तुम क्या कर सकते हो") ||
+      text.includes("क्या कर सकते हो") ||
+      text.includes("what can you do")) {
+    speak("मैं समय और तारीख बता सकता हूँ, सप्ताह का दिन बता सकता हूँ, आसान गणित कर सकता हूँ और Google या YouTube खोलने की कोशिश कर सकता हूँ।");
+    return;
+  }
+
+  if (text.includes("आज कौन") && text.includes("दिन") ||
+      text.includes("कौन सा दिन") ||
+      text.includes("कौन-सा दिन") ||
+      text.includes("which day")) {
+    speak("आज " + getDayName(new Date()) + " है।");
+    return;
+  }
+
+  if (text.includes("तारीख") || text.includes("date") ||
+      text.includes("आज की डेट")) {
+    speak(getDateText());
+    return;
+  }
+
+  if (text.includes("समय") || text.includes("कितने बजे") ||
+      text.includes("कितना बज") || text.includes("time")) {
+    speak("अभी समय है " + new Date().toLocaleTimeString("hi-IN", {
+      hour: "numeric", minute: "2-digit"
+    }));
+    return;
+  }
+
+  if (text.includes("google") || text.includes("गूगल")) {
+    speak("Google खोलने की कोशिश कर रहा हूँ।");
+    setTimeout(() => {
+      window.location.href =
+        "intent://www.google.com/#Intent;scheme=https;package=com.google.android.googlequicksearchbox;end";
+    }, 700);
+    return;
+  }
+
+  if (text.includes("youtube") || text.includes("यूट्यूब")) {
+    speak("YouTube खोलने की कोशिश कर रहा हूँ।");
+    setTimeout(() => {
+      window.location.href =
+        "intent://www.youtube.com/#Intent;scheme=https;package=com.google.android.youtube;end";
+    }, 700);
+    return;
+  }
+
+  try {
+    const result = calculate(text);
+    if (result !== null) {
+      speak("जवाब है " + result);
+      return;
+    }
+  } catch (e) {
+    speak(e.message);
+    return;
+  }
+
+  speak("माफ़ कीजिए, मैं यह सवाल अभी नहीं समझ पाया। आप समय, तारीख, सप्ताह के दिन या गणित का सवाल पूछ सकते हैं।");
+}
+
+function startListening() {
+  if (!SpeechRecognition) {
+    speak("आपके ब्राउज़र में आवाज़ पहचानने की सुविधा उपलब्ध नहीं है। कृपया Chrome में खोलें।");
+    return;
+  }
+
+  if (recognition) {
+    try { recognition.abort(); } catch (e) {}
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.lang = "hi-IN";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 3;
+
+  recognition.onstart = () => {
+    listening = true;
+    statusBox.textContent = "सुन रहा हूँ… अब बोलिए।";
+    listenBtn.textContent = "🎙️ सुन रहा हूँ…";
+  };
+
+  recognition.onresult = (event) => {
+    const alternatives = Array.from(event.results[0]);
+    const transcript = alternatives[0].transcript;
+    statusBox.textContent = "आपने कहा: " + transcript;
+    runCommand(transcript);
+  };
+
+  recognition.onerror = (event) => {
+    listening = false;
+    listenBtn.textContent = "🎙️ बोलिए — ALIS सुन रहा है";
+    statusBox.textContent = "आवाज़ पहचानने में समस्या: " + event.error;
+  };
+
+  recognition.onend = () => {
+    listening = false;
+    listenBtn.textContent = "🎙️ बोलिए — ALIS सुन रहा है";
+  };
+
+  try {
+    recognition.start();
+  } catch (e) {
+    statusBox.textContent = "दोबारा शुरू करने से पहले कुछ क्षण रुकिए।";
+  }
+}
+
+listenBtn.addEventListener("click", startListening);
+
+stopBtn.addEventListener("click", () => {
+  if (recognition) {
+    try { recognition.abort(); } catch (e) {}
+  }
+  window.speechSynthesis.cancel();
+  listening = false;
+  speaking = false;
+  statusBox.textContent = "आवाज़ बंद है।";
+  listenBtn.textContent = "🎙️ बोलिए — ALIS सुन रहा है";
+});
+
 </script>
-</main>
 </body>
 </html>
