@@ -155,24 +155,28 @@ function calculate(text) {
     .replace(/बताओ/g, "")
     .replace(/कैलकुलेट/g, "")
     .replace(/[?=]/g, " ")
-    .trim();    
-  // Sin और Cos की गणना डिग्री में
-    const trigMatch = s.match(
-      /\b(sin|sine|cos|cosine)\s*(\d+(?:\.\d+)?)/i
-    );
+    .trim();
 
-    if (trigMatch) {
-      const fn = trigMatch[1].toLowerCase();
-      const angle = Number(trigMatch[2]);
-      const radians = angle * Math.PI / 180;
+// Sin और Cos की गणना डिग्री में
+const trigMatch = s.match(
+  /\b(sin|sine|sun|cos|cosine)\s*(\d+(?:\.\d+)?)/i
+) || s.match(
+  /(साइन|सिन|कोस|कॉस)\s*(\d+(?:\.\d+)?)/
+);
 
-      const answer =
-        fn === "sin" || fn === "sine"
-          ? Math.sin(radians)
-          : Math.cos(radians);
+if (trigMatch) {
+  const fn = trigMatch[1].toLowerCase();
+  const angle = Number(trigMatch[2]);
+  const radians = angle * Math.PI / 180;
 
-      return Number(answer.toFixed(8)).toString();
-    }
+  const isSin = ["sin", "sine", "sun", "साइन", "सिन"].includes(fn);
+
+  const answer = isSin
+    ? Math.sin(radians)
+    : Math.cos(radians);
+
+  return Number(answer.toFixed(8)).toString();
+}
 
   const words = {
     "शून्य":"0", "एक":"1", "दो":"2", "तीन":"3",
