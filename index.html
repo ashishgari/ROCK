@@ -159,23 +159,52 @@ function calculate(text) {
     .replace(/[?=]/g, " ")
     .trim();
 
-// Sin और Cos की गणना डिग्री में
+// Trigonometry: डिग्री में गणना
 const trigMatch = s.match(
-  /\b(sin|sine|sun|cos|cosine)\s*(\d+(?:\.\d+)?)/i
+  /\b(cosec|csc|cos|sine|sin|sun|sec|tan|cot)\s*(\d+(?:\.\d+)?)/i
 ) || s.match(
-  /(साइन|सिन|कोस|कॉस)\s*(\d+(?:\.\d+)?)/
+  /(साइन|सिन|सन|कोस|कॉस|टैन|टैनजेंट|कॉट|कॉटजेंट|सेक|सेकेंट|कोसेक|कोसेकेंट)\s*(\d+(?:\.\d+)?)/
 );
 
 if (trigMatch) {
-  const fn = trigMatch[1].toLowerCase();
+  let fn = trigMatch[1].toLowerCase();
+
+  const names = {
+    "साइन": "sin",
+    "सिन": "sin",
+    "सन": "sin",
+    "कोस": "cos",
+    "कॉस": "cos",
+    "टैन": "tan",
+    "टैनजेंट": "tan",
+    "कॉट": "cot",
+    "कॉटजेंट": "cot",
+    "सेक": "sec",
+    "सेकेंट": "sec",
+    "कोसेक": "cosec",
+    "कोसेकेंट": "cosec",
+    "sine": "sin",
+    "sun": "sin",
+    "csc": "cosec"
+  };
+
+  fn = names[fn] || fn;
+
   const angle = Number(trigMatch[2]);
   const radians = angle * Math.PI / 180;
 
-  const isSin = ["sin", "sine", "sun", "साइन", "सिन"].includes(fn);
+  let answer;
 
-  const answer = isSin
-    ? Math.sin(radians)
-    : Math.cos(radians);
+  if (fn === "sin") answer = Math.sin(radians);
+  else if (fn === "cos") answer = Math.cos(radians);
+  else if (fn === "tan") answer = Math.tan(radians);
+  else if (fn === "cot") answer = 1 / Math.tan(radians);
+  else if (fn === "sec") answer = 1 / Math.cos(radians);
+  else if (fn === "cosec") answer = 1 / Math.sin(radians);
+
+  if (!Number.isFinite(answer)) {
+    return "यह मान अपरिभाषित है";
+  }
 
   return Number(answer.toFixed(8)).toString();
 }
