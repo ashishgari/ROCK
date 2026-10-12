@@ -181,8 +181,8 @@ function calculate(text) {
 
 // Trigonometry: डिग्री में गणना
   // वर्गमूल की गणना
-const rootMatch = s.match(/(\d+(?:\.\d+)?)\s*(?:का\s*)?(?:वर्गमूल|स्क्वायर रूट|square root)/i);
 
+const rootMatch = s.match(/(?:रूट|वर्गमूल|स्क्वायर रूट|square root)\s*(\d+(?:\.\d+)?)|(\d+(?:\.\d+)?)\s*(?:का\s*)?(?:वर्गमूल|रूट|स्क्वायर रूट|square root)/i);
 if (rootMatch) {
   const number = Number(rootMatch[1]);
 
