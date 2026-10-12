@@ -155,7 +155,24 @@ function calculate(text) {
     .replace(/बताओ/g, "")
     .replace(/कैलकुलेट/g, "")
     .replace(/[?=]/g, " ")
-    .trim();
+    .trim();    
+  // Sin और Cos की गणना डिग्री में
+    const trigMatch = s.match(
+      /\b(sin|sine|cos|cosine)\s*(\d+(?:\.\d+)?)/i
+    );
+
+    if (trigMatch) {
+      const fn = trigMatch[1].toLowerCase();
+      const angle = Number(trigMatch[2]);
+      const radians = angle * Math.PI / 180;
+
+      const answer =
+        fn === "sin" || fn === "sine"
+          ? Math.sin(radians)
+          : Math.cos(radians);
+
+      return Number(answer.toFixed(8)).toString();
+    }
 
   const words = {
     "शून्य":"0", "एक":"1", "दो":"2", "तीन":"3",
