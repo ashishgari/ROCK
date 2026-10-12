@@ -124,6 +124,8 @@ function getDateText() {
 
 function calculate(text) {
     let s = text.toLowerCase()
+      .replace(/साइन/g, "sin")
+.replace(/सन/g, "sin")
     .replace(/एलिस/g, "")
     .replace(/alis/gi, "")
     .replace(/कितने होते हैं/g, "")
