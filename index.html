@@ -180,6 +180,18 @@ function calculate(text) {
     .trim();
 
 // Trigonometry: डिग्री में गणना
+  // वर्गमूल की गणना
+const rootMatch = s.match(/(\d+(?:\.\d+)?)\s*(?:का\s*)?(?:वर्गमूल|स्क्वायर रूट|square root)/i);
+
+if (rootMatch) {
+  const number = Number(rootMatch[1]);
+
+  if (number < 0) {
+    return "ऋणात्मक संख्या का वास्तविक वर्गमूल नहीं निकाला जा सकता";
+  }
+
+  return Number(Math.sqrt(number).toFixed(8)).toString();
+}
 const trigMatch = s.match(
   /\b(cosec|csc|cos|sine|sin|sun|sec|tan|cot)\s*(\d+(?:\.\d+)?)/i
 ) || s.match(
