@@ -234,7 +234,7 @@ function runCommand(raw) {
     return;
   }
 
-  if (/\b(good morning|सुप्रभात)\b/.test(text)) {
+  if (text.includes("good morning") || text.includes("सुप्रभात") || text.includes("गुड मॉर्निंग") || text.includes("एलिस गुड मॉर्निंग")) {
     speak("गुड मॉर्निंग! आपका दिन शुभ हो। मैं ALIS हूँ। बताइए, मैं आपकी क्या मदद करूँ?");
     return;
   }
