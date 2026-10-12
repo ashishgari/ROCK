@@ -180,6 +180,13 @@ function calculate(text) {
     .trim();
 
 // Trigonometry: डिग्री में गणना
+  // वर्ग निकालने की गणना
+const squareMatch = s.match(/(\d+(?:\.\d+)?)\s*(?:का\s*)?(?:वर्ग|स्क्वायर|square)(?:\s*कितना)?(?:\s*होता\s*है)?/i);
+
+if (squareMatch) {
+  const number = Number(squareMatch[1]);
+  return Number((number * number).toFixed(8)).toString();
+}
   // वर्गमूल की गणना
 
 const rootMatch = s.match(/(?:रूट|वर्गमूल|स्क्वायर रूट|square root)\s*(\d+(?:\.\d+)?)|(\d+(?:\.\d+)?)\s*(?:का\s*)?(?:वर्गमूल|रूट|स्क्वायर रूट|square root)/i);
