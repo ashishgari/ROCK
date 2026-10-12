@@ -181,7 +181,7 @@ function calculate(text) {
 
 // Trigonometry: डिग्री में गणना
   // घन निकालने की गणना
-const cubeMatch = s.match(/(\d+(?:\.\d+)?)\s*(?:का\s*)?(?:घन|गान|क्यूब|cube)(?:\s*कितना)?(?:\s*होता\s*है)?/i);
+const cubeMatch = s.match(/(\d+(?:\.\d+)?)\s*(?:का\s*)?(?:घन|गान|गुणनफल|क्यूब|क्यूब्ड|cube|cubed)(?:\s*कितना)?(?:\s*होता\s*है)?/i);
 
 if (cubeMatch) {
   const number = Number(cubeMatch[1]);
