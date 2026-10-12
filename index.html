@@ -173,9 +173,9 @@ function calculate(text) {
 const trigMatch = s.match(
   /\b(cosec|csc|cos|sine|sin|sun|sec|tan|cot)\s*(\d+(?:\.\d+)?)/i
 ) || s.match(
-  /(साइन|सिन|सन|कोस|कॉस|टैन|टैनजेंट|कॉट|कॉटजेंट|सेक|सेकेंट|कोसेक|कोसेकेंट)\s*(\d+(?:\.\d+)?)/
+  /(साइन|सिन|सन|कोस|कॉस|कस|टैन|टेन|टैनजेंट|कॉट|कोट|कॉटजेंट|सेक|सैक|सेकेंट|कोसेक|कोसेकेंट)\s*(\d+(?:\.\d+)?)/
 );
-
+  
 if (trigMatch) {
   let fn = trigMatch[1].toLowerCase();
 
