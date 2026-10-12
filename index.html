@@ -397,6 +397,7 @@ function startListening() {
   recognition.onresult = (event) => {
     const alternatives = Array.from(event.results[0]);
     const transcript = alternatives[0].transcript;
+    console.log("ALIS ने सुना:", transcript);
     statusBox.textContent = "आपने कहा: " + transcript;
     runCommand(transcript);
   };
