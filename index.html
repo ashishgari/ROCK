@@ -541,9 +541,10 @@ function startListening() {
     statusBox.textContent = "दोबारा शुरू करने से पहले कुछ क्षण रुकिए।";
   }
 }
-
-listenBtn.addEventListener("click", startListening);
-
+listenBtn.addEventListener("click", () => {
+  statusBox.textContent = "बटन काम कर रहा है। माइक्रोफोन शुरू करने की कोशिश हो रही है…";
+  startListening();
+});
 stopBtn.addEventListener("click", () => {
   if (recognition) {
     try { recognition.abort(); } catch (e) {}
