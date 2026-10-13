@@ -201,8 +201,7 @@ if (cubeMatch) {
   return Number((number * number * number).toFixed(8)).toString();
 }
   // प्रतिशत निकालने की गणना
-const percentMatch = s.match(/(\d+(?:\.\d+)?)\s*(?:का\s*)?(\d+(?:\.\d+)?)\s*प्रतिशत|(\d+(?:\.\d+)?)\s*प्रतिशत\s*(?:का\s*)?(\d+(?:\.\d+)?)/i);
-
+const percentMatch = s.match(/(\d+(?:\.\d+)?)\s*(?:का\s*)?(\d+(?:\.\d+)?)\s*(?:प्रतिशत|%)/i);
 if (percentMatch) {
 const number = Number(percentMatch[1] || percentMatch[4]);
 const percent = Number(percentMatch[2] || percentMatch[3]);
