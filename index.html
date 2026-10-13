@@ -435,13 +435,30 @@ function runCommand(raw) {
     return;
   }
     if (
-    text.includes("तुम कौन हो") ||
-    text.includes("आप कौन हो") ||
-    text.includes("तुम्हारा नाम") ||
-      text.includes("अपना परिचय दो") ||
-    text.includes("तुम क्या कर सकते") ||
-    text.includes("तुम क्या कर सकती")
-  ) {
+  text.includes("तुम मुझे कैसे जानती हो") ||
+  text.includes("आप मुझे कैसे जानते हो") ||
+  text.includes("तुम मेरे बारे में कैसे जानती हो")
+) {
+  speak("Ashish, मैं आपको हमारी बातचीत में आपके द्वारा बताई गई बातों से जानती हूँ। मैं आपके बारे में वही जानती हूँ जो आपने मुझे बताया है।");
+  return;
+}
+
+if (
+  text.includes("तुम कौन हो") ||
+  text.includes("आप कौन हो") ||
+  text.includes("तुम्हारा नाम") ||
+  text.includes("अपना परिचय दो") ||
+  text.includes("तुम क्या कर सकते") ||
+  text.includes("तुम क्या कर सकती")
+) {
+  speak("नमस्ते! मैं ALIS हूँ। मैं आपकी AI सहायक हूँ और आपकी मदद करने के लिए तैयार हूँ।");
+  return;
+}
+
+if (text.includes("तुम कैसी हो") || text.includes("कैसे हो")) {
+  speak("मैं अच्छी हूँ, Ashish! आपसे बात करके खुशी हो रही है। बताइए, आज मैं आपकी क्या मदद करूँ?");
+  return;
+}
     speak("नमस्ते! मैं ALIS हूँ। मैं आपकी AI सहायक हूँ और आपकी मदद करने के लिए तैयार हूँ।");
     return;
   }
