@@ -58,7 +58,13 @@ button:active { background: #0077aa; }
 
   <button id="listenBtn">🎙️ बोलिए — ALIS सुन रहा है</button>
   <button id="stopBtn">⏹️ आवाज़ बंद करें</button>
-
+<div class="voice-panel">
+  <label for="voiceSelect">🎙️ ALIS की आवाज़ चुनें:</label>
+  <select id="voiceSelect">
+    <option value="">आवाज़ें लोड हो रही हैं...</option>
+  </select>
+  <button id="previewVoiceBtn">🔊 आवाज़ सुनें</button>
+</div>
   <p id="status">शुरू करने के लिए बटन दबाएँ।</p>
   <div id="answer">नमस्ते! मैं ALIS हूँ।</div>
 </div>
@@ -68,7 +74,55 @@ const statusBox = document.getElementById("status");
 const answerBox = document.getElementById("answer");
 const listenBtn = document.getElementById("listenBtn");
 const stopBtn = document.getElementById("stopBtn");
+const voiceSelect = document.getElementById("voiceSelect");
+const previewVoiceBtn = document.getElementById("previewVoiceBtn");
 
+let availableVoices = [];
+
+function loadVoices() {
+  availableVoices = window.speechSynthesis.getVoices();
+  voiceSelect.innerHTML = "";
+
+  if (availableVoices.length === 0) {
+    voiceSelect.innerHTML =
+      '<option value="">आवाज़ उपलब्ध नहीं</option>';
+    return;
+  }
+
+  availableVoices.forEach((voice, index) => {
+    const option = document.createElement("option");
+    option.value = index;
+    option.textContent = `${voice.name} (${voice.lang})`;
+    voiceSelect.appendChild(option);
+  });
+}
+
+if ("speechSynthesis" in window) {
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+  loadVoices();
+}
+
+previewVoiceBtn.addEventListener("click", () => {
+  const index = Number(voiceSelect.value);
+  const voice = availableVoices[index];
+
+  if (!voice) {
+    statusBox.textContent = "अभी कोई आवाज़ उपलब्ध नहीं है।";
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const sample = new SpeechSynthesisUtterance(
+    "नमस्ते! मैं एलिस हूँ। आप अपनी पसंद की आवाज़ चुन सकते हैं।"
+  );
+
+  sample.voice = voice;
+  sample.lang = voice.lang;
+  sample.rate = 0.9;
+
+  window.speechSynthesis.speak(sample);
+});
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -88,7 +142,13 @@ function speak(text) {
   window.speechSynthesis.cancel();
 
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "hi-IN";
+  const selectedIndex = Number(voiceSelect.value);
+const selectedVoice = availableVoices[selectedIndex];
+
+if (selectedVoice) {
+  utterance.voice = selectedVoice;
+  utterance.lang = selectedVoice.lang;
+}
   utterance.rate = 0.85;
 utterance.pitch = 1.20;
 
