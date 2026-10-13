@@ -98,8 +98,16 @@ function loadVoices() {
 }
 
 if ("speechSynthesis" in window) {
-  window.speechSynthesis.onvoiceschanged = loadVoices;
-  loadVoices();
+  function refreshVoices() {
+    loadVoices();
+
+    if (availableVoices.length === 0) {
+      setTimeout(refreshVoices, 1000);
+    }
+  }
+
+  window.speechSynthesis.onvoiceschanged = refreshVoices;
+  refreshVoices();
 }
 
 previewVoiceBtn.addEventListener("click", () => {
