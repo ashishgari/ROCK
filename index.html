@@ -469,10 +469,16 @@ function runCommand(raw) {
     return;
   }
 
-  if (text.includes("धन्यवाद") || text.includes("शुक्रिया")) {
-    speak("आपका स्वागत है Ashish! बताइए, अब हम क्या सीखें।");
-    return;
-  }
+  if (
+  text.includes("धन्यवाद") ||
+  text.includes("शुक्रिया") ||
+  text.includes("थैंक यू") ||
+  text.includes("thank you") ||
+  text.includes("thanks")
+) {
+  speak("आपका स्वागत है Ashish! बताइए, अब हम क्या सीखें।");
+  return;
+}
   speak("माफ़ कीजिए, मैं यह सवाल अभी नहीं समझ पाया। आप समय, तारीख, सप्ताह के दिन या गणित का सवाल पूछ सकते हैं।");
 }
 
