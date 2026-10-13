@@ -89,8 +89,8 @@ function speak(text) {
 
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "hi-IN";
-  utterance.rate = 0.88;
-utterance.pitch = 1.12;
+  utterance.rate = 0.85;
+utterance.pitch = 1.20;
 
   utterance.onend = () => {
     speaking = false;
