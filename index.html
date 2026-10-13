@@ -184,6 +184,13 @@ function calculate(text) {
     .trim();
 
 // Trigonometry: डिग्री में गणना
+  // घनमूल निकालने की गणना
+const cubeRootMatch = s.match(/(?:घनमूल|क्यूब रूट|cube root)\s*(\d+(?:.\d+)?)|(\d+(?:.\d+)?)\s*(?:का\s*)?(?:घनमूल|क्यूब रूट|cube root)/i);
+
+if (cubeRootMatch) {
+const number = Number(cubeRootMatch[1] || cubeRootMatch[2]);
+return Number(Math.cbrt(number).toFixed(8)).toString();
+}
   // घन निकालने की गणना
 const cubeMatch = s.match(/(\d+(?:\.\d+)?)\s*(?:का\s*)?(?:घन|गान|गुणनफल|क्यूब|क्यूब्ड|cube|cubed)(?:\s*कितना)?(?:\s*होता\s*है)?/i);
 if (cubeMatch) {
