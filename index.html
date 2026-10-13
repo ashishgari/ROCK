@@ -200,6 +200,14 @@ if (cubeMatch) {
   const number = Number(cubeMatch[1]);
   return Number((number * number * number).toFixed(8)).toString();
 }
+  // प्रतिशत निकालने की गणना
+const percentMatch = s.match(/(\d+(?:\.\d+)?)\s*(?:का\s*)?(\d+(?:\.\d+)?)\s*प्रतिशत|(\d+(?:\.\d+)?)\s*प्रतिशत\s*(?:का\s*)?(\d+(?:\.\d+)?)/i);
+
+if (percentMatch) {
+const number = Number(percentMatch[1] || percentMatch[4]);
+const percent = Number(percentMatch[2] || percentMatch[3]);
+return Number((number * percent / 100).toFixed(8)).toString();
+}
   // वर्ग निकालने की गणना
 const squareMatch = s.match(/(\d+(?:\.\d+)?)\s*(?:का\s*)?(?:वर्ग|स्क्वायर|square)(?:\s*कितना)?(?:\s*होता\s*है)?/i);
 
