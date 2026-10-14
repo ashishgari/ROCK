@@ -626,17 +626,20 @@ stopBtn.addEventListener("click", () => {
 
   function playJosh() {
   const audio = document.getElementById("joshAudio");
+  const status = document.getElementById("status");
 
-  audio.play().then(() => {
-    document.getElementById("status").textContent = "Josh की आवाज़ चल रही है।";
-  }).catch((error) => {
-    document.getElementById("status").textContent =
-      "ऑडियो नहीं चला। लिंक या फ़ाइल की जाँच करनी होगी।";
-  });
-}
+  audio.play()
+    .then(() => {
+      status.textContent = "Josh की आवाज़ चल रही है।";
+    })
+    .catch(() => {
+      status.textContent = "ऑडियो नहीं चल रहा है।";
+    });
+  }
+  
 </script>
   
-<button type="button" id="joshButton">🔊 Josh की आवाज़ सुनें</button>
+<button type="button" onclick="playJosh()">🔊 Josh की आवाज़ सुनें</button>
 
 <audio id="joshAudio" preload="auto" src="https://drive.google.com/uc?export=download&id=17n9ipXjBpAM6NhwJtYaYhfUAFkMaCpyo"></audio>
 
