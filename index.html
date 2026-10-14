@@ -636,7 +636,50 @@ stopBtn.addEventListener("click", () => {
       status.textContent = "ऑडियो नहीं चल रहा है।";
     });
   }
+  function alisOfflineBrain(text) {
+  let q = text.toLowerCase().trim();
+
+  // गणित: जोड़, घटाव, गुणा और भाग
+  let math = q.match(/(-?\d+(?:\.\d+)?)\s*([+\-*/])\s*(-?\d+(?:\.\d+)?)/);
+
+  if (math) {
+    let a = Number(math[1]);
+    let op = math[2];
+    let b = Number(math[3]);
+
+    if (op === "+") return a + b;
+    if (op === "-") return a - b;
+    if (op === "*") return a * b;
+    if (op === "/") {
+      if (b === 0) return "शून्य से भाग नहीं दिया जा सकता।";
+      return a / b;
+    }
+  }
+
+  // आसान हिंदी गणित के सवाल
+  let hindiMath = q.match(/(-?\d+)\s*(जोड़|प्लस|में से घटाओ|माइनस|गुणा|गुना|भाग)\s*(-?\d+)/);
+
+  if (hindiMath) {
+    let a = Number(hindiMath[1]);
+    let op = hindiMath[2];
+    let b = Number(hindiMath[3]);
+
+    if (op === "जोड़" || op === "प्लस") return a + b;
+    if (op === "में से घटाओ" || op === "माइनस") return a - b;
+    if (op === "गुणा" || op === "गुना") return a * b;
+    if (op === "भाग") return b === 0 ? "शून्य से भाग नहीं दिया जा सकता।" : a / b;
+  }
+
+  // सामान्य ज्ञान
+  if (q.includes("भारत की राजधानी")) return "भारत की राजधानी नई दिल्ली है।";
+  if (q.includes("बिहार की राजधानी")) return "बिहार की राजधानी पटना है।";
+  if (q.includes("भारत के प्रधानमंत्री")) return "प्रधानमंत्री का नाम बताने के लिए मुझे नवीनतम ऑनलाइन जानकारी चाहिए।";
+  if (q.includes("तुम्हारा नाम") || q.includes("तुम कौन हो")) return "मेरा नाम ALIS है।";
+  if (q.includes("नमस्ते") || q.includes("नमस्कार")) return "नमस्ते! मैं ALIS हूँ। बताइए, मैं आपकी क्या मदद करूँ?";
+  if (q.includes("प्रकाश संश्लेषण")) return "प्रकाश संश्लेषण वह प्रक्रिया है जिसमें हरे पौधे सूर्य के प्रकाश की मदद से अपना भोजन बनाते हैं।";
   
+  return null;
+  }
 </script>
   
 <button type="button" onclick="playJosh()">🔊 Josh की आवाज़ सुनें</button>
