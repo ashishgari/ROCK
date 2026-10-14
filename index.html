@@ -628,5 +628,10 @@ stopBtn.addEventListener("click", () => {
   <button onclick="document.getElementById('joshAudio').play()">Josh की आवाज़ सुनें</button>
 
 <audio id="joshAudio" preload="auto" src="https://drive.google.com/uc?export=download&id=17n9ipXjBpAM6NhwJtYaYhfUAFkMaCpyo"></audio>
+  <script>
+document.getElementById('joshAudio').addEventListener('error', function() {
+  alert('Josh की आवाज़ लोड नहीं हो पाई। इंटरनेट जाँचें।');
+});
+  </script>
 </body>
 </html>
