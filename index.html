@@ -502,6 +502,11 @@ function runCommand(raw) {
     speak(e.message);
     return;
   }
+  const offlineAnswer = alisOfflineBrain(text);
+if (offlineAnswer !== null) {
+speak("जवाब है " + offlineAnswer);
+return;
+}
     if (
   text.includes("तुम मुझे कैसे जानती हो") ||
   text.includes("आप मुझे कैसे जानते हो") ||
