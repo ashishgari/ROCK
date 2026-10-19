@@ -294,7 +294,6 @@ if (orb) {
   window.speechSynthesis.cancel();
 
   const utterance = new SpeechSynthesisUtterance(text);
-  const orb = document.getElementById("alisOrb");
 
 const orbPulse = setInterval(() => {
   if (!speaking || !orb) return;
@@ -323,7 +322,7 @@ utterance.onerror = () => {
     speaking = false;
     clearInterval(orbPulse);
     if (orb) orb.classList.remove("scatter");
-}; aap
+}; 
 
   window.speechSynthesis.speak(utterance);
 }
