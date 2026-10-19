@@ -283,6 +283,14 @@ function speak(text) {
   }
 
   speaking = true;
+  const orb = document.getElementById("alisOrb");
+
+if (orb) {
+  orb.classList.remove("scatter");
+  void orb.offsetWidth;
+  orb.classList.add("scatter");
+  setTimeout(() => orb.classList.remove("scatter"), 750);
+}
   window.speechSynthesis.cancel();
 
   const utterance = new SpeechSynthesisUtterance(text);
