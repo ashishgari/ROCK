@@ -127,11 +127,79 @@ select {
   color: #f1edff;
   overflow-wrap: anywhere;
 }
+  /* ALIS AI ORB */
+.alis-orb {
+  width: 180px;
+  height: 180px;
+  margin: 20px auto 25px;
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(
+    circle at 50% 50%,
+    #111 0%,
+    #050505 55%,
+    #000 75%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 25px rgba(150, 170, 255, 0.18),
+    inset 0 0 25px rgba(255, 255, 255, 0.08);
+}
+
+.orb-particles {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-image:
+    radial-gradient(circle, #fff 1px, transparent 1.8px),
+    radial-gradient(circle, #cbd8ff 1px, transparent 2px),
+    radial-gradient(circle, #fff 1.5px, transparent 2px);
+  background-size: 19px 23px, 31px 29px, 43px 37px;
+  background-position: 0 0, 12px 8px, 20px 15px;
+  animation: orbDrift 5s linear infinite;
+  mask-image: radial-gradient(circle, #000 45%, transparent 73%);
+  -webkit-mask-image: radial-gradient(circle, #000 45%, transparent 73%);
+}
+
+@keyframes orbDrift {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+  to {
+    transform: rotate(360deg) scale(1.08);
+  }
+}
+  /* ALIS Orb Scatter Effect */
+.alis-orb.scatter .orb-particles {
+  animation: orbScatter 0.7s ease-out;
+}
+
+@keyframes orbScatter {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    filter: brightness(1);
+  }
+  45% {
+    transform: scale(1.8);
+    opacity: 0.25;
+    filter: brightness(2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
 </style>
 </head>
 
 <body>
 <div class="container">
+  <div id="alisOrb" class="alis-orb">
+  <div class="orb-particles"></div>
+  </div>
   <h1>ALIS</h1>
   <p>आपका हिंदी वॉइस असिस्टेंट</p>
 
@@ -671,6 +739,14 @@ function startListening() {
   recognition.onresult = (event) => {
     const alternatives = Array.from(event.results[0]);
     const transcript = alternatives[0].transcript;
+    const orb = document.getElementById("alisOrb");
+
+if (/\balis\b|एलिस/i.test(transcript) && orb) {
+  orb.classList.remove("scatter");
+  void orb.offsetWidth;
+  orb.classList.add("scatter");
+  setTimeout(() => orb.classList.remove("scatter"), 750);
+}
     console.log("ALIS ने सुना:", transcript);
     statusBox.textContent = "आपने कहा: " + transcript;
     runCommand(transcript);
