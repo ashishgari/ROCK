@@ -730,7 +730,7 @@ function startListening() {
     const transcript = alternatives[0].transcript;
     const orb = document.getElementById("alisOrb");
 
-if (/\balis\b|एलिस/i.test(transcript) && orb) {
+if (orb) {
   orb.classList.remove("scatter");
   void orb.offsetWidth;
   orb.classList.add("scatter");
