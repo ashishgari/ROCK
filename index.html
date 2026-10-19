@@ -294,6 +294,15 @@ if (orb) {
   window.speechSynthesis.cancel();
 
   const utterance = new SpeechSynthesisUtterance(text);
+  const orb = document.getElementById("alisOrb");
+
+const orbPulse = setInterval(() => {
+  if (!speaking || !orb) return;
+
+  orb.classList.remove("scatter");
+  void orb.offsetWidth;
+  orb.classList.add("scatter");
+}, 700);
   const selectedIndex = Number(voiceSelect.value);
 const selectedVoice = availableVoices[selectedIndex];
 
@@ -306,11 +315,15 @@ utterance.pitch = 1.20;
 
   utterance.onend = () => {
     speaking = false;
-  };
+    clearInterval(orbPulse);
+    if (orb) orb.classList.remove("scatter");
+};
 
-  utterance.onerror = () => {
+utterance.onerror = () => {
     speaking = false;
-  };
+    clearInterval(orbPulse);
+    if (orb) orb.classList.remove("scatter");
+}; aap
 
   window.speechSynthesis.speak(utterance);
 }
