@@ -150,6 +150,25 @@ select {
   mask-image: radial-gradient(circle, #000 45%, transparent 73%);
   -webkit-mask-image: radial-gradient(circle, #000 45%, transparent 73%);
 }
+  /* ALIS Listening Mode */
+.alis-orb.listening {
+  box-shadow:
+    0 0 35px rgba(0, 180, 255, 0.7),
+    inset 0 0 25px rgba(0, 180, 255, 0.4);
+}
+
+/* ALIS Speaking Mode */
+.alis-orb.speaking {
+  box-shadow:
+    0 0 45px rgba(80, 120, 255, 0.9),
+    inset 0 0 35px rgba(80, 120, 255, 0.5);
+  animation: alisPulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes alisPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
 
 @keyframes orbDrift {
   from {
@@ -741,6 +760,11 @@ function startListening() {
 
   recognition.onstart = () => {
     listening = true;
+    const orb = document.getElementById("alisOrb");
+if (orb) {
+  orb.classList.remove("speaking");
+  orb.classList.add("listening");
+}
     statusBox.textContent = "सुन रहा हूँ… अब बोलिए।";
     listenBtn.textContent = "🎙️ सुन रहा हूँ…";
   };
@@ -768,9 +792,14 @@ if (orb) {
   };
 
   recognition.onend = () => {
-    listening = false;
-    listenBtn.textContent = "🎙️ बोलिए — ALIS सुन रहा है";
-  };
+  listening = false;
+  listenBtn.textContent = "🎙️ बोलिए — ALIS सुन रहा है";
+
+  const orb = document.getElementById("alisOrb");
+  if (orb) {
+    orb.classList.remove("listening");
+  }
+};
 
   try {
     recognition.start();
