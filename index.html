@@ -286,6 +286,9 @@ function measureOrbVoice() {
   const volume = Math.sqrt(sum / samples.length);
   const target = Math.max(0, Math.min(1, (volume - 0.015) * 20));
   console.log("ALIS आवाज़ का स्तर:", volume, "प्रतिक्रिया:", target);
+  statusBox.textContent =
+  "आवाज़ स्तर: " + volume.toFixed(3) +
+  " | प्रतिक्रिया: " + target.toFixed(3);
 
   orbVoiceLevel += (target - orbVoiceLevel) * 0.25;
   
