@@ -303,6 +303,10 @@ function speak(text) {
 
   speaking = true;
   const orb = document.getElementById("alisOrb");
+  if (orb) {
+  orb.classList.remove("listening");
+  orb.classList.add("speaking");
+  }
 
 if (orb) {
   orb.classList.remove("scatter");
@@ -330,18 +334,21 @@ if (selectedVoice) {
 }
   utterance.rate = 0.85;
 utterance.pitch = 1.20;
-
   utterance.onend = () => {
     speaking = false;
     clearInterval(orbPulse);
-    if (orb) orb.classList.remove("scatter");
+    if (orb) {
+        orb.classList.remove("scatter", "speaking");
+    }
 };
 
 utterance.onerror = () => {
     speaking = false;
     clearInterval(orbPulse);
-    if (orb) orb.classList.remove("scatter");
-}; 
+        if (orb) {
+        orb.classList.remove("scatter", "speaking");
+        }
+};
 
   window.speechSynthesis.speak(utterance);
 }
