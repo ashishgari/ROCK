@@ -240,7 +240,58 @@ const orbCtx = orbCanvas.getContext("2d");
 
 let orbParticles = [];
 let orbVoiceLevel = 0;
+let orbAudioContext = null;
+let orbAnalyser = null;
+let orbMicStream = null;
+let orbMicActive = false;
 
+async function startOrbMic() {
+  if (orbMicActive) return;
+
+  try {
+    orbMicStream = await navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
+
+    orbAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+    await orbAudioContext.resume();
+
+    orbAnalyser = orbAudioContext.createAnalyser();
+    orbAnalyser.fftSize = 256;
+
+    const micSource =
+      orbAudioContext.createMediaStreamSource(orbMicStream);
+
+    micSource.connect(orbAnalyser);
+    orbMicActive = true;
+    measureOrbVoice();
+  } catch (error) {
+    console.log("ALIS microphone level:", error);
+  }
+}
+
+function measureOrbVoice() {
+  if (!orbMicActive || !orbAnalyser) return;
+
+  const samples = new Uint8Array(orbAnalyser.fftSize);
+  orbAnalyser.getByteTimeDomainData(samples);
+
+  let sum = 0;
+
+  for (const sample of samples) {
+    const value = (sample - 128) / 128;
+    sum += value * value;
+  }
+
+  const volume = Math.sqrt(sum / samples.length);
+  const target = Math.max(0, Math.min(1, (volume - 0.015) * 20));
+
+  orbVoiceLevel += (target - orbVoiceLevel) * 0.25;
+  
+
+  requestAnimationFrame(measureOrbVoice);
+  }
+  
 function resizeOrbCanvas() {
   const rect = orbCanvas.getBoundingClientRect();
   const dpr = window.devicePixelRatio || 1;
@@ -820,11 +871,13 @@ function startListening() {
   recognition = new SpeechRecognition();
   recognition.lang = "hi-IN";
   recognition.continuous = false;
+};
   recognition.interimResults = false;
   recognition.maxAlternatives = 3;
 
   recognition.onstart = () => {
     listening = true;
+    startOrbMic();
     const orb = document.getElementById("alisOrb");
 if (orb) {
   orb.classList.remove("speaking");
@@ -899,7 +952,32 @@ stopBtn.addEventListener("click", () => {
       status.textContent = "ऑडियो नहीं चल रहा है।";
     });
   }
-  function alisOfflineBrain(text) {
+  function startListening() {
+  if (!SpeechRecognition) {
+    speak("आपके ब्राउज़र में आवाज़ पहचानने की सुविधा उपलब्ध नहीं है। कृपया Chrome में खोलें।");
+    return;
+  }
+
+  if (recognition) {
+    try { recognition.abort(); } catch (e) {}
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.lang = "hi-IN";
+  recognition.continuous = false;
+  recognition.onstart = () => {
+  startOrbMic();
+};
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 3;
+
+  recognition.onstart = () => {
+    listening = true;
+    const orb = document.getElementById("alisOrb");
+if (orb) {
+  orb.classList.remove("speaking");
+  orb.classList.add("listening");
+} alisOfflineBrain(text) {
   let q = text.toLowerCase().trim();
 
   // गणित: जोड़, घटाव, गुणा और भाग
