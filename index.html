@@ -1049,7 +1049,22 @@ function alisOfflineBrain(text) {
   return null;
 }
   
-  
+ listenBtn.onclick = function () {
+  statusBox.textContent = "ALIS माइक शुरू कर रहा है...";
+  startListening();
+};
+
+stopBtn.onclick = function () {
+  if (recognition) {
+    try {
+      recognition.abort();
+    } catch (e) {}
+  }
+
+  window.speechSynthesis.cancel();
+  listening = false;
+  statusBox.textContent = "आवाज़ बंद है।";
+}; 
 </script>
   
 <button type="button" onclick="playJosh()">🔊 Josh की आवाज़ सुनें</button>
