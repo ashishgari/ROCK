@@ -963,25 +963,47 @@ stopBtn.addEventListener("click", () => {
   }
 
   if (recognition) {
-    try { recognition.abort(); } catch (e) {}
+    try {
+      recognition.abort();
+    } catch (e) {}
   }
 
   recognition = new SpeechRecognition();
   recognition.lang = "hi-IN";
   recognition.continuous = false;
-  recognition.onstart = () => {
-  startOrbMic();
-};
   recognition.interimResults = false;
   recognition.maxAlternatives = 3;
 
   recognition.onstart = () => {
     listening = true;
-    const orb = document.getElementById("alisOrb");
-if (orb) {
-  orb.classList.remove("speaking");
-  orb.classList.add("listening");
-} alisOfflineBrain(text) {
+    startOrbMic();
+    statusBox.textContent = "ALIS सुन रहा है। अब बोलिए।";
+  };
+
+  recognition.onresult = (event) => {
+    const raw = event.results[0][0].transcript;
+    statusBox.textContent = "आपने कहा: " + raw;
+    runCommand(raw);
+  };
+
+  recognition.onerror = (event) => {
+    listening = false;
+    statusBox.textContent =
+      "आवाज़ पहचानने में समस्या: " + event.error;
+  };
+
+  recognition.onend = () => {
+    listening = false;
+  };
+
+  try {
+    recognition.start();
+  } catch (error) {
+    statusBox.textContent = "माइक्रोफ़ोन शुरू नहीं हो पाया। दोबारा कोशिश करें।";
+  }
+  }
+  
+function alisOfflineBrain(text) {
   let q = text.toLowerCase().trim();
 
   // गणित: जोड़, घटाव, गुणा और भाग
@@ -1001,8 +1023,8 @@ if (orb) {
     }
   }
 
-  // आसान हिंदी गणित के सवाल
-  let hindiMath = q.match(/(-?\d+)\s*(जोड़|प्लस|में से घटाओ|माइनस|गुणा|गुना|भाग)\s*(-?\d+)/);
+  // आसान हिंदी गणित
+  let hindiMath = q.match(/(-?\d+)\s*(जोड़|प्लस|माइनस|गुणा|गुना|भाग)\s*(-?\d+)/);
 
   if (hindiMath) {
     let a = Number(hindiMath[1]);
@@ -1010,21 +1032,24 @@ if (orb) {
     let b = Number(hindiMath[3]);
 
     if (op === "जोड़" || op === "प्लस") return a + b;
-    if (op === "में से घटाओ" || op === "माइनस") return a - b;
+    if (op === "माइनस") return a - b;
     if (op === "गुणा" || op === "गुना") return a * b;
-    if (op === "भाग") return b === 0 ? "शून्य से भाग नहीं दिया जा सकता।" : a / b;
+    if (op === "भाग") {
+      return b === 0 ? "शून्य से भाग नहीं दिया जा सकता।" : a / b;
+    }
   }
 
   // सामान्य ज्ञान
   if (q.includes("भारत की राजधानी")) return "भारत की राजधानी नई दिल्ली है।";
   if (q.includes("बिहार की राजधानी")) return "बिहार की राजधानी पटना है।";
-  if (q.includes("भारत के प्रधानमंत्री")) return "प्रधानमंत्री का नाम बताने के लिए मुझे नवीनतम ऑनलाइन जानकारी चाहिए।";
   if (q.includes("तुम्हारा नाम") || q.includes("तुम कौन हो")) return "मेरा नाम ALIS है।";
   if (q.includes("नमस्ते") || q.includes("नमस्कार")) return "नमस्ते! मैं ALIS हूँ। बताइए, मैं आपकी क्या मदद करूँ?";
   if (q.includes("प्रकाश संश्लेषण")) return "प्रकाश संश्लेषण वह प्रक्रिया है जिसमें हरे पौधे सूर्य के प्रकाश की मदद से अपना भोजन बनाते हैं।";
-  
+
   return null;
-  }
+}
+  
+  
 </script>
   
 <button type="button" onclick="playJosh()">🔊 Josh की आवाज़ सुनें</button>
