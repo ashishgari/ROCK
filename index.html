@@ -579,8 +579,7 @@ if (squareMatch) {
   // वर्गमूल की गणना
 
 const rootMatch = s.match(/(?:रूट|वर्गमूल|स्क्वायर रूट|square root)\s*(\d+(?:\.\d+)?)|(\d+(?:\.\d+)?)\s*(?:का\s*)?(?:वर्गमूल|रूट|स्क्वायर रूट|square root)/i);
-if (rootMatch) {
-  const number = Number(rootMatch[1]);
+const number = Number(rootMatch[1] || rootMatch[2]);
 
   if (number < 0) {
     return "ऋणात्मक संख्या का वास्तविक वर्गमूल नहीं निकाला जा सकता";
