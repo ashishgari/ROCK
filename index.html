@@ -130,7 +130,7 @@ function loadVoices() {
       '<option value="">ब्राउज़र में आवाज़ उपलब्ध नहीं</option>';
     return;
   }
-
+  
   availableVoices = window.speechSynthesis.getVoices();
   voiceSelect.innerHTML = "";
 
@@ -156,7 +156,10 @@ function loadVoices() {
 
 if ("speechSynthesis" in window) {
   loadVoices();
-  window.speechSynthesis.addEventListener("voiceschanged", loadVoices);
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+
+  setTimeout(loadVoices, 500);
+  setTimeout(loadVoices, 1500);
 }
 
 function speak(message) {
