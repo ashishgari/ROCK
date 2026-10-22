@@ -6,16 +6,13 @@
 <title>ALIS Voice Assistant</title>
 
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
   padding: 20px 14px;
   min-height: 100vh;
-  background:
-    radial-gradient(ellipse at top, #29234b 0%, #111323 48%, #080b13 100%);
+  background: radial-gradient(circle, #18264b, #070b18);
   color: #f8f5ff;
   font-family: Arial, sans-serif;
   text-align: center;
@@ -24,1050 +21,425 @@ body {
 .container {
   max-width: 420px;
   margin: 18px auto;
-  padding: 25px 20px;
-  background: linear-gradient(160deg, #24243d, #121725);
-  border: 1px solid rgba(190, 170, 255, 0.22);
-  border-radius: 30px;
-  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.4);
+  padding: 24px 20px;
+  background: #10172c;
+  border: 1px solid #35436c;
+  border-radius: 22px;
 }
 
-h1 {
+h1 { letter-spacing: 5px; }
+p { color: #c9c7e6; line-height: 1.6; }
+
+button, select {
+  width: 100%;
+  padding: 14px;
   margin: 10px 0;
-  font-size: 42px;
-  letter-spacing: 7px;
-  color: #e1d6ff;
-  text-shadow: 0 0 22px rgba(159, 125, 255, 0.7);
-}
-
-h1::before {
-  content: none;
-}
-
-p {
-  color: #c9c7e6;
-  line-height: 1.7;
+  border-radius: 12px;
+  font-size: 16px;
 }
 
 button {
-  display: block;
-  width: 100%;
-  margin: 14px 0;
-  padding: 15px 12px;
-  border: 1px solid rgba(205, 194, 255, 0.22);
-  border-radius: 17px;
-  background: linear-gradient(110deg, #7563e9, #4d67d9);
+  border: 0;
+  background: #7868f5;
   color: white;
-  font-size: 16px;
   font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 7px 22px rgba(80, 81, 190, 0.22);
 }
 
-button:active {
-  transform: scale(0.98);
-}
-
-#stopBtn {
-  background: linear-gradient(110deg, #383750, #272d43);
-}
-
-.voice-panel {
-  margin-top: 22px;
-  padding: 16px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.045);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-}
-
-label {
-  display: block;
-  margin-bottom: 12px;
-  color: #d9d0ff;
-}
+button:active { transform: scale(.98); }
+#stopBtn { background: #a83f59; }
 
 select {
-  width: 100%;
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid #615a91;
-  background: #17192c;
+  background: #202a46;
   color: white;
-  font-size: 15px;
+  border: 1px solid #53638e;
 }
 
-#previewVoiceBtn {
-  background: linear-gradient(110deg, #a16be8, #7563e9);
+#alisOrb {
+  width: 150px;
+  height: 150px;
+  margin: 20px auto;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #b4f4ff, #536cff 40%, #21104f 75%);
+  box-shadow: 0 0 35px #536cff;
+  transition: transform .2s;
 }
 
-#status {
-  margin-top: 20px;
-  color: #b6c8ff;
+#alisOrb.listening {
+  transform: scale(1.08);
+  box-shadow: 0 0 45px #66e5ff;
+}
+
+#alisOrb.speaking {
+  box-shadow: 0 0 45px #bd79ff;
+}
+
+#status, #answer {
   overflow-wrap: anywhere;
+  margin-top: 16px;
 }
 
 #answer {
-  margin-top: 20px;
-  padding: 17px;
-  background: rgba(7, 10, 22, 0.75);
-  border: 1px solid rgba(170, 157, 255, 0.18);
-  border-radius: 18px;
-  min-height: 55px;
-  line-height: 1.7;
-  color: #f1edff;
-  overflow-wrap: anywhere;
-}
-  /* ALIS AI ORB */
-.alis-orb {
-  width: 180px;
-  height: 180px; 
-background: radial-gradient(
-  circle at 50% 50%,
-  #ffffff 0%,
-  #f0f4ff 12%,
-  #aabaff 24%,
-  #29234b 48%,
-  #050505 72%,
-  #000000 100%
-);
-
-  margin: 20px auto 25px;
-  position: relative;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow:
-    0 0 25px rgba(150, 170, 255, 0.18),
-    inset 0 0 25px rgba(255, 255, 255, 0.08);
-}
-
-.orb-particles {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background-image:
-    radial-gradient(circle, #fff 1px, transparent 1.8px),
-    radial-gradient(circle, #cbd8ff 1px, transparent 2px),
-    radial-gradient(circle, #fff 1.5px, transparent 2px);
-  background-size: 19px 23px, 31px 29px, 43px 37px;
-  background-position: 0 0, 12px 8px, 20px 15px;
-  animation: orbDrift 5s linear infinite;
-  mask-image: radial-gradient(circle, #000 45%, transparent 73%);
-  -webkit-mask-image: radial-gradient(circle, #000 45%, transparent 73%);
-}
-  /* ALIS Listening Mode */
-  .orb-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  border-radius: 50%;
-  }
-.alis-orb.listening {
-  box-shadow:
-    0 0 35px rgba(0, 180, 255, 0.7),
-    inset 0 0 25px rgba(0, 180, 255, 0.4);
-}
-
-/* ALIS Speaking Mode */
-.alis-orb.speaking {
-  box-shadow:
-    0 0 45px rgba(80, 120, 255, 0.9),
-    inset 0 0 35px rgba(80, 120, 255, 0.5);
-  animation: alisPulse 1s ease-in-out infinite alternate;
-}
-
-@keyframes alisPulse {
-  from { transform: scale(1); }
-  to { transform: scale(1.08); }
-}
-
-@keyframes orbDrift {
-  from {
-    transform: rotate(0deg) scale(1);
-  }
-  to {
-    transform: rotate(360deg) scale(1.08);
-  }
-}
-  /* ALIS Orb Scatter Effect */
-.alis-orb.scatter .orb-particles {
-  animation: orbScatter 0.7s ease-out forwards !important;
-}
-
-@keyframes orbScatter {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-    filter: brightness(1);
-  }
-  45% {
-    transform: scale(1.8);
-    opacity: 0.25;
-    filter: brightness(2);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-    filter: brightness(1);
-  }
+  padding: 14px;
+  border-radius: 12px;
+  background: #1a2340;
 }
 </style>
 </head>
 
 <body>
 <div class="container">
-  <div id="alisOrb" class="alis-orb">
-  <canvas id="orbCanvas" class="orb-canvas"></canvas>
-  </div>
+  <div id="alisOrb"></div>
   <h1>ALIS</h1>
   <p>आपका हिंदी वॉइस असिस्टेंट</p>
 
   <button id="listenBtn">🎙️ बोलिए — ALIS सुन रहा है</button>
   <button id="stopBtn">⏹️ आवाज़ बंद करें</button>
-<div class="voice-panel">
-  <label for="voiceSelect">🎙️ ALIS की आवाज़ चुनें:</label>
+
+  <p>🎙️ ALIS की आवाज़ चुनें</p>
   <select id="voiceSelect">
     <option value="">आवाज़ें लोड हो रही हैं...</option>
   </select>
   <button id="previewVoiceBtn">🔊 आवाज़ सुनें</button>
-</div>
+
   <p id="status">शुरू करने के लिए बटन दबाएँ।</p>
   <div id="answer">नमस्ते! मैं ALIS हूँ।</div>
 </div>
 
 <script>
+"use strict";
+
 const statusBox = document.getElementById("status");
-  // ALIS के अलग-अलग चमकते कण
-const orbCanvas = document.getElementById("orbCanvas");
-const orbCtx = orbCanvas.getContext("2d");
-
-let orbParticles = [];
-let orbVoiceLevel = 0;
-let orbAudioContext = null;
-let orbAnalyser = null;
-let orbMicStream = null;
-let orbMicActive = false;
-
-async function startOrbMic() {
-  if (orbMicActive) return;
-
-  try {
-    orbMicStream = await navigator.mediaDevices.getUserMedia({
-      audio: true
-    });
-
-    orbAudioContext = new (window.AudioContext || window.webkitAudioContext)();
-    await orbAudioContext.resume();
-
-    orbAnalyser = orbAudioContext.createAnalyser();
-    orbAnalyser.fftSize = 256;
-
-    const micSource =
-      orbAudioContext.createMediaStreamSource(orbMicStream);
-
-    micSource.connect(orbAnalyser);
-    orbMicActive = true;
-    measureOrbVoice();
-  } catch (error) {
-    console.log("ALIS microphone level:", error);
-  }
-}
-
-function measureOrbVoice() {
-  if (!orbMicActive || !orbAnalyser) return;
-
-  const samples = new Uint8Array(orbAnalyser.fftSize);
-  orbAnalyser.getByteTimeDomainData(samples);
-
-  let sum = 0;
-
-  for (const sample of samples) {
-    const value = (sample - 128) / 128;
-    sum += value * value;
-  }
-  
- const volume = Math.sqrt(sum / samples.length);
-  const target = Math.max(0, Math.min(1, (volume - 0.015) * 20));
-    
-console.log("ALIS आवाज़ का स्तर:", volume, "प्रतिक्रिया:", target);
-  
-
-  orbVoiceLevel += (target - orbVoiceLevel) * 0.25;
-  
-
-  requestAnimationFrame(measureOrbVoice);
-  }
-  
-function resizeOrbCanvas() {
-  const rect = orbCanvas.getBoundingClientRect();
-  const dpr = window.devicePixelRatio || 1;
-
-  orbCanvas.width = rect.width * dpr;
-  orbCanvas.height = rect.height * dpr;
-  orbCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-  orbParticles = Array.from({ length: 100 }, () => ({
-    angle: Math.random() * Math.PI * 2,
-    radius: 12 + Math.random() * rect.width * 0.35,
-    speed: 0.002 + Math.random() * 0.012,
-    size: 0.3 + Math.random() * 0.8,
-    alpha: 0.3 + Math.random() * 0.7
-  }));
-}
-
-function drawOrbParticles() {
-  const w = orbCanvas.clientWidth;
-  const h = orbCanvas.clientHeight;
-  const cx = w / 2;
-  const cy = h / 2;
-
-  orbCtx.clearRect(0, 0, w, h);
-
-  orbParticles.forEach(p => {
-    p.angle += p.speed * (1 + orbVoiceLevel * 5);
-    const r = p.radius * (1 + orbVoiceLevel * 0.12);
-    const x = cx + Math.cos(p.angle) * r;
-    const y = cy + Math.sin(p.angle) * r;
-
-    orbCtx.beginPath();
-    orbCtx.arc(x, y, p.size + orbVoiceLevel * 1.2, 0, Math.PI * 2);
-    orbCtx.fillStyle = `rgba(200,220,255,${p.alpha})`;
-    orbCtx.fill();
-  });
-
-  requestAnimationFrame(drawOrbParticles);
-}
-
-resizeOrbCanvas();
-drawOrbParticles();
-window.addEventListener("resize", resizeOrbCanvas);
 const answerBox = document.getElementById("answer");
 const listenBtn = document.getElementById("listenBtn");
 const stopBtn = document.getElementById("stopBtn");
 const voiceSelect = document.getElementById("voiceSelect");
 const previewVoiceBtn = document.getElementById("previewVoiceBtn");
+const orb = document.getElementById("alisOrb");
 
-let availableVoices = [];
-
-function loadVoices() {
-  availableVoices = window.speechSynthesis.getVoices();
-  voiceSelect.innerHTML = "";
-
-  if (availableVoices.length === 0) {
-    voiceSelect.innerHTML =
-      '<option value="">आवाज़ उपलब्ध नहीं</option>';
-    return;
-  }
-
-  availableVoices.forEach((voice, index) => {
-    const option = document.createElement("option");
-    option.value = index;
-    option.textContent = `${voice.name} (${voice.lang})`;
-    voiceSelect.appendChild(option);
-  });
-}
-
-if ("speechSynthesis" in window) {
-  function refreshVoices() {
-    loadVoices();
-
-    if (availableVoices.length === 0) {
-      setTimeout(refreshVoices, 1000);
-    }
-  }
-
-  window.speechSynthesis.onvoiceschanged = refreshVoices;
-  refreshVoices();
-}
-
-previewVoiceBtn.addEventListener("click", () => {
-  const index = Number(voiceSelect.value);
-  const voice = availableVoices[index];
-
-  if (!voice) {
-    statusBox.textContent = "अभी कोई आवाज़ उपलब्ध नहीं है।";
-    return;
-  }
-
-  window.speechSynthesis.cancel();
-
-  const sample = new SpeechSynthesisUtterance(
-    "नमस्ते! मैं एलिस हूँ। आप अपनी पसंद की आवाज़ चुन सकते हैं।"
-  );
-
-  sample.voice = voice;
-  sample.lang = voice.lang;
-  sample.rate = 0.9;
-
-  window.speechSynthesis.speak(sample);
-});
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
 
 let recognition = null;
 let listening = false;
 let speaking = false;
+let availableVoices = [];
 
-function speak(text) {
-  answerBox.textContent = text;
-
+function loadVoices() {
   if (!("speechSynthesis" in window)) {
-    statusBox.textContent = "आपका ब्राउज़र आवाज़ में जवाब नहीं दे सकता।";
+    voiceSelect.innerHTML =
+      '<option value="">ब्राउज़र में आवाज़ उपलब्ध नहीं</option>';
     return;
   }
 
-  speaking = true;
-  const orb = document.getElementById("alisOrb");
-  if (orb) {
-  orb.classList.remove("listening");
-  orb.classList.add("speaking");
+  availableVoices = window.speechSynthesis.getVoices();
+  voiceSelect.innerHTML = "";
+
+  if (!availableVoices.length) {
+    voiceSelect.innerHTML =
+      '<option value="">अभी आवाज़ें उपलब्ध नहीं हैं</option>';
+    return;
   }
 
-if (orb) {
-  orb.classList.remove("scatter");
-  void orb.offsetWidth;
-  orb.classList.add("scatter");
-  setTimeout(() => orb.classList.remove("scatter"), 750);
+  availableVoices.forEach((voice, index) => {
+    const option = document.createElement("option");
+    option.value = String(index);
+    option.textContent = `${voice.name} (${voice.lang})`;
+    voiceSelect.appendChild(option);
+  });
+
+  const hindiIndex = availableVoices.findIndex(v =>
+    v.lang.toLowerCase().startsWith("hi")
+  );
+
+  if (hindiIndex >= 0) voiceSelect.value = String(hindiIndex);
 }
+
+if ("speechSynthesis" in window) {
+  loadVoices();
+  window.speechSynthesis.addEventListener("voiceschanged", loadVoices);
+}
+
+function speak(message) {
+  answerBox.textContent = message;
+
+  if (!("speechSynthesis" in window)) {
+    statusBox.textContent = "इस ब्राउज़र में आवाज़ का समर्थन उपलब्ध नहीं है।";
+    return;
+  }
+
   window.speechSynthesis.cancel();
 
-  const utterance = new SpeechSynthesisUtterance(text);
+  const utterance = new SpeechSynthesisUtterance(message);
+  const selectedVoice = availableVoices[Number(voiceSelect.value)];
 
-const orbPulse = setInterval(() => {
-  if (!speaking || !orb) return;
+  if (selectedVoice) {
+    utterance.voice = selectedVoice;
+    utterance.lang = selectedVoice.lang;
+  } else {
+    utterance.lang = "hi-IN";
+  }
 
-  orb.classList.remove("scatter");
-  void orb.offsetWidth;
-  orb.classList.add("scatter");
-}, 700);
-  const selectedIndex = Number(voiceSelect.value);
-const selectedVoice = availableVoices[selectedIndex];
+  utterance.rate = 0.9;
+  utterance.pitch = 1;
 
-if (selectedVoice) {
-  utterance.voice = selectedVoice;
-  utterance.lang = selectedVoice.lang;
-}
-  utterance.rate = 0.85;
-utterance.pitch = 1.20;
+  utterance.onstart = () => {
+    speaking = true;
+    orb.classList.add("speaking");
+  };
+
   utterance.onend = () => {
     speaking = false;
-    clearInterval(orbPulse);
-    if (orb) {
-        orb.classList.remove("scatter", "speaking");
-    }
-};
+    orb.classList.remove("speaking");
+  };
 
-utterance.onerror = () => {
+  utterance.onerror = () => {
     speaking = false;
-    clearInterval(orbPulse);
-        if (orb) {
-        orb.classList.remove("scatter", "speaking");
-        }
-};
+    orb.classList.remove("speaking");
+    statusBox.textContent = "आवाज़ चलाने में समस्या हुई।";
+  };
 
   window.speechSynthesis.speak(utterance);
 }
 
-function getDayName(date) {
-  const days = [
+previewVoiceBtn.addEventListener("click", () => {
+  loadVoices();
+
+  if (!availableVoices.length) {
+    statusBox.textContent =
+      "आवाज़ उपलब्ध नहीं है। Chrome की आवाज़ सेटिंग जाँचें।";
+    return;
+  }
+
+  speak("नमस्ते! मैं ALIS हूँ।");
+});
+
+function getDayName() {
+  return [
     "रविवार", "सोमवार", "मंगलवार", "बुधवार",
     "गुरुवार", "शुक्रवार", "शनिवार"
-  ];
-  return days[date.getDay()];
+  ][new Date().getDay()];
 }
 
 function getDateText() {
   const now = new Date();
   const months = [
-    "जनवरी", "फ़रवरी", "मार्च", "अप्रैल",
-    "मई", "जून", "जुलाई", "अगस्त",
-    "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"
+    "जनवरी", "फ़रवरी", "मार्च", "अप्रैल", "मई", "जून",
+    "जुलाई", "अगस्त", "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"
   ];
-
   return `आज ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()} है।`;
 }
 
 function calculate(text) {
-    let s = text.toLowerCase()
-            .replace(/साइन/g, "sin")
-      .replace(/सिन/g, "sin")
-      .replace(/सन/g, "sin")
-      .replace(/कस/g, "cos")
-      .replace(/कॉस/g, "cos")
-      .replace(/कोस/g, "cos")
-      .replace(/टैनजेंट/g, "tan")
-      .replace(/टैन/g, "tan")
-      .replace(/टेन/g, "tan")
-      .replace(/कॉटजेंट/g, "cot")
-      .replace(/कॉट/g, "cot")
-      .replace(/कोट/g, "cot")
-      .replace(/एसईसी/g, "sec")
-      .replace(/सेकेंट/g, "sec")
-      .replace(/सैक/g, "sec")
-      .replace(/सेक/g, "sec")
-      .replace(/सीओएसईसी/g, "cosec")
-      .replace(/कोसेकेंट/g, "cosec")
-      .replace(/कोसेक/g, "cosec")
-    .replace(/एलिस/g, "")
-    .replace(/alis/gi, "")
-    .replace(/कितने होते हैं/g, "")
-    .replace(/कितने होते है/g, "")
-    .replace(/×/g, "*")
-    .replace(/x/g, "*")
+  let s = text.toLowerCase()
+    .replace(/एलिस|alis/gi, "")
+    .replace(/कितने होते हैं|कितने होते है|कितना होता है|कितना है/g, "")
+    .replace(/जमा|जोड़ो|जोड़|प्लस|plus/g, "+")
+    .replace(/घटाओ|घटा|माइनस|minus/g, "-")
+    .replace(/गुणा|गुना|into|multiplied by/g, "*")
+    .replace(/भाग|बटा|divided by/g, "/")
+    .replace(/×|x/g, "*")
     .replace(/÷/g, "/")
-    .replace(/plus/g, "+")
-    .replace(/minus/g, "-")
-      .replace(/10:45/g, "tan 45")
-.replace(/10:30/g, "tan 30")
-     .replace(/1060/g, "tan 60")
-    .replace(/into/g, "*")
-    .replace(/multiplied by/g, "*")
-    .replace(/divided by/g, "/")
-    .replace(/जमा/g, "+")
-    .replace(/जोड़ो/g, "+")
-    .replace(/जोड़/g, "+")
-    .replace(/प्लस/g, "+")
-    .replace(/घटाओ/g, "-")
-    .replace(/घटा/g, "-")
-    .replace(/माइनस/g, "-")
-    .replace(/गुणा/g, "*")
-    .replace(/गुना/g, "*")
-    .replace(/भाग/g, "/")
-    .replace(/बटा/g, "/")
-    .replace(/कितना होता है/g, "")
-    .replace(/कितना है/g, "")
-    .replace(/कितना होगा/g, "")
-      .replace(/पांच/g, "5")
-.replace(/पाँच/g, "5")
-      .replace(/आठ/g, "8")
-.replace(/सत्ताईस/g, "27")
-.replace(/पच्चीस/g, "25")
-.replace(/एक सौ पच्चीस/g, "125")
-      .replace(/सात/g, "7")
-      .replace(/गान/g, "घन")
-    .replace(/का/g, "")
-    .replace(/है/g, "")
-    .replace(/बताओ/g, "")
-    .replace(/कैलकुलेट/g, "")
+    .replace(/पाँच|पांच/g, "5")
+    .replace(/शून्य/g, "0")
+    .replace(/एक/g, "1")
+    .replace(/दो/g, "2")
+    .replace(/तीन/g, "3")
+    .replace(/चार/g, "4")
+    .replace(/छह/g, "6")
+    .replace(/सात/g, "7")
+    .replace(/आठ/g, "8")
+    .replace(/नौ/g, "9")
+    .replace(/दस/g, "10")
     .replace(/[?=]/g, " ")
     .trim();
 
-// Trigonometry: डिग्री में गणना
-  // घनमूल निकालने की गणना
-const cubeRootMatch = s.match(/(?:घनमूल|क्यूब रूट|cube root)\s*(\d+(?:\.\d+)?)|(\d+(?:\.\d+)?)\s*(?:का\s*)?(?:घनमूल|क्यूब रूट|cube root)/i);
-if (cubeRootMatch) {
-const number = Number(cubeRootMatch[1] || cubeRootMatch[2]);
-return Number(Math.cbrt(number).toFixed(8)).toString();
-}
-  // घन निकालने की गणना
-const cubeMatch = s.match(/(\d+(?:\.\d+)?)\s*(?:का\s*)?(?:घन|गान|गुणनफल|क्यूब|क्यूब्ड|cube|cubed)(?:\s*कितना)?(?:\s*होता\s*है)?/i);
-if (cubeMatch) {
-  const number = Number(cubeMatch[1]);
-  return Number((number * number * number).toFixed(8)).toString();
-}
-  // प्रतिशत निकालने की गणना
-const percentMatch = s.match(/(\d+(?:\.\d+)?)\s*(?:का\s*)?(\d+(?:\.\d+)?)\s*(?:प्रतिशत|%)/i);
-if (percentMatch) {
-const number = Number(percentMatch[1] || percentMatch[4]);
-const percent = Number(percentMatch[2] || percentMatch[3]);
-return Number((number * percent / 100).toFixed(8)).toString();
-}
-  // वर्ग निकालने की गणना
-const squareMatch = s.match(/(\d+(?:\.\d+)?)\s*(?:का\s*)?(?:वर्ग|स्क्वायर|square)(?:\s*कितना)?(?:\s*होता\s*है)?/i);
-
-if (squareMatch) {
-  const number = Number(squareMatch[1]);
-  return Number((number * number).toFixed(8)).toString();
-}
-  // वर्गमूल की गणना
-
-const rootMatch = s.match(/(?:रूट|वर्गमूल|स्क्वायर रूट|square root)\s*(\d+(?:\.\d+)?)|(\d+(?:\.\d+)?)\s*(?:का\s*)?(?:वर्गमूल|रूट|स्क्वायर रूट|square root)/i);
-const number = Number(rootMatch[1] || rootMatch[2]);
-
-  if (number < 0) {
-    return "ऋणात्मक संख्या का वास्तविक वर्गमूल नहीं निकाला जा सकता";
-  }
-
-  return Number(Math.sqrt(number).toFixed(8)).toString();
-}
-const trigMatch = s.match(
-  /\b(cosec|csc|cos|sine|sin|sun|sec|tan|cot)\s*(\d+(?:\.\d+)?)/i
-) || s.match(
-  /(साइन|सिन|सन|कोस|कॉस|कस|टैन|टेन|टैनजेंट|कॉट|कोट|कॉटजेंट|सेक|सैक|सेकेंट|कोसेक|कोसेकेंट)\s*(\d+(?:\.\d+)?)/
-);
-  
-if (trigMatch) {
-  let fn = trigMatch[1].toLowerCase();
-
-  const names = {
-    "साइन": "sin",
-    "सिन": "sin",
-    "सन": "sin",
-    "कोस": "cos",
-    "कॉस": "cos",
-    "टैन": "tan",
-    "टैनजेंट": "tan",
-    "कॉट": "cot",
-    "कॉटजेंट": "cot",
-    "सेक": "sec",
-    "सेकेंट": "sec",
-    "कोसेक": "cosec",
-    "कोसेकेंट": "cosec",
-    "sine": "sin",
-    "sun": "sin",
-    "csc": "cosec"
-  };
-
-  fn = names[fn] || fn;
-
-  const angle = Number(trigMatch[2]);
-  const radians = angle * Math.PI / 180;
-
-  let answer;
-
-  if (fn === "sin") answer = Math.sin(radians);
-  else if (fn === "cos") answer = Math.cos(radians);
-  else if (fn === "tan") answer = Math.tan(radians);
-  else if (fn === "cot") answer = 1 / Math.tan(radians);
-  else if (fn === "sec") answer = 1 / Math.cos(radians);
-  else if (fn === "cosec") answer = 1 / Math.sin(radians);
-
-  if (!Number.isFinite(answer)) {
-    return "यह मान अपरिभाषित है";
-  }
-
-  return Number(answer.toFixed(8)).toString();
-}
-
-  const words = {
-    "शून्य":"0", "एक":"1", "दो":"2", "तीन":"3",
-    "चार":"4", "पाँच":"5", "पांच":"5", "छह":"6",
-    "सात":"7", "आठ":"8", "नौ":"9", "दस":"10",
-    "ग्यारह":"11", "बारह":"12", "तेरह":"13",
-    "चौदह":"14", "पंद्रह":"15", "सोलह":"16",
-    "सत्रह":"17", "अठारह":"18", "उन्नीस":"19",
-    "बीस":"20", "तीस":"30", "चालीस":"40",
-    "पचास":"50", "सौ":"100"
-  };
-
-  for (const [word, number] of Object.entries(words)) {
-    s = s.replaceAll(word, number);
-  }
-
-  // गणना केवल सुरक्षित अंक और गणितीय चिह्नों से करें।
   if (!/^[\d\s.+*/()-]+$/.test(s)) return null;
 
-  const parts = s.match(/(?:\d+(?:\.\d+)?|[()+*/-])/g);
-  if (!parts || parts.join("") !== s.replace(/\s/g, "")) return null;
+  const tokens = s.match(/\d+(?:\.\d+)?|[()+*/-]/g);
+  if (!tokens || tokens.join("").replace(/\s/g, "") !== s.replace(/\s/g, "")) {
+    return null;
+  }
+
+  let i = 0;
+
+  function factor() {
+    if (tokens[i] === "-") {
+      i++;
+      return -factor();
+    }
+    if (tokens[i] === "(") {
+      i++;
+      const v = expression();
+      if (tokens[i++] !== ")") throw Error("गलत गणित");
+      return v;
+    }
+    const v = Number(tokens[i++]);
+    if (!Number.isFinite(v)) throw Error("गलत गणित");
+    return v;
+  }
+
+  function term() {
+    let v = factor();
+    while (tokens[i] === "*" || tokens[i] === "/") {
+      const op = tokens[i++];
+      const b = factor();
+      if (op === "/" && b === 0) throw Error("शून्य से भाग नहीं दे सकते।");
+      v = op === "*" ? v * b : v / b;
+    }
+    return v;
+  }
+
+  function expression() {
+    let v = term();
+    while (tokens[i] === "+" || tokens[i] === "-") {
+      const op = tokens[i++];
+      const b = term();
+      v = op === "+" ? v + b : v - b;
+    }
+    return v;
+  }
 
   try {
-    let i = 0;
-
-    function expression() {
-      let value = term();
-      while (parts[i] === "+" || parts[i] === "-") {
-        const op = parts[i++];
-        const right = term();
-        value = op === "+" ? value + right : value - right;
-      }
-      return value;
-    }
-
-    function term() {
-      let value = factor();
-      while (parts[i] === "*" || parts[i] === "/") {
-        const op = parts[i++];
-        const right = factor();
-        if (op === "/" && right === 0) throw Error("शून्य से भाग नहीं दे सकते।");
-        value = op === "*" ? value * right : value / right;
-      }
-      return value;
-    }
-
-    function factor() {
-      if (parts[i] === "-") {
-        i++;
-        return -factor();
-      }
-      if (parts[i] === "(") {
-        i++;
-        const value = expression();
-        if (parts[i++] !== ")") throw Error();
-        return value;
-      }
-      const value = Number(parts[i++]);
-      if (!Number.isFinite(value)) throw Error();
-      return value;
-    }
-
     const result = expression();
-    if (i !== parts.length || !Number.isFinite(result)) return null;
+    if (i !== tokens.length || !Number.isFinite(result)) return null;
     return Number(result.toFixed(8)).toString();
-  } catch (e) {
-    if (e.message === "शून्य से भाग नहीं दे सकते।") throw e;
-    return null;
+  } catch (error) {
+    return error.message === "शून्य से भाग नहीं दे सकते।"
+      ? error.message : null;
   }
 }
 
 function runCommand(raw) {
-  const text = raw.toLowerCase()
-    .replace(/[।,!?]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+  const text = raw.toLowerCase().trim();
 
-  if (!text) {
-    speak("मुझे आपकी बात सुनाई नहीं दी। कृपया फिर से बोलिए।");
-    return;
-  }
-
-  if (text.includes("good morning") || text.includes("सुप्रभात") || text.includes("गुड मॉर्निंग") || text.includes("एलिस गुड मॉर्निंग")) {
-    speak("गुड मॉर्निंग! आपका दिन शुभ हो। मैं ALIS हूँ। बताइए, मैं आपकी क्या मदद करूँ?");
-    return;
-  }
-
-  if (text.includes("good evening") || text.includes("शुभ संध्या")) {
-    speak("गुड ईवनिंग! आपका स्वागत है। बताइए, मैं आपकी क्या मदद करूँ?");
-    return;
-  }
-
-  if (text.includes("good night") || text.includes("शुभ रात्रि")) {
-    speak("गुड नाइट! आपका दिन अच्छा बीते और रात आरामदायक हो।");
+  if (text.includes("good morning") || text.includes("गुड मॉर्निंग") ||
+      text.includes("सुप्रभात")) {
+    speak("गुड मॉर्निंग! बताइए, मैं आपकी क्या मदद करूँ?");
     return;
   }
 
   if (text.includes("नमस्ते") || text.includes("नमस्कार") ||
-      text.includes("hello") || text.includes("hi ")) {
+      text.includes("hello")) {
     speak("नमस्ते! मैं ALIS हूँ। बताइए, मैं आपकी क्या मदद करूँ?");
     return;
   }
 
-  if (text.includes("तुम क्या कर सकते हो") ||
-      text.includes("क्या कर सकते हो") ||
-      text.includes("what can you do")) {
-    speak("मैं समय और तारीख बता सकता हूँ, सप्ताह का दिन बता सकता हूँ, आसान गणित कर सकता हूँ और Google या YouTube खोलने की कोशिश कर सकता हूँ।");
+  if (text.includes("तुम्हारा नाम") || text.includes("तुम कौन हो")) {
+    speak("मेरा नाम ALIS है।");
     return;
   }
 
-  if (text.includes("आज कौन") && text.includes("दिन") ||
-      text.includes("कौन सा दिन") ||
-      text.includes("कौन-सा दिन") ||
-      text.includes("which day")) {
-    speak("आज " + getDayName(new Date()) + " है।");
+  if (text.includes("क्या कर सकते हो")) {
+    speak("मैं समय, तारीख बता सकता हूँ, आसान गणित कर सकता हूँ और Google या YouTube खोल सकता हूँ।");
     return;
   }
 
-  if (text.includes("तारीख") || text.includes("date") ||
-      text.includes("आज की डेट")) {
+  if (text.includes("कौन सा दिन") || text.includes("कौन-सा दिन") ||
+      (text.includes("आज कौन") && text.includes("दिन"))) {
+    speak("आज " + getDayName() + " है।");
+    return;
+  }
+
+  if (text.includes("तारीख") || text.includes("date")) {
     speak(getDateText());
     return;
   }
 
   if (text.includes("समय") || text.includes("कितने बजे") ||
-      text.includes("कितना बज") || text.includes("time")) {
+      text.includes("time")) {
     speak("अभी समय है " + new Date().toLocaleTimeString("hi-IN", {
       hour: "numeric", minute: "2-digit"
     }));
     return;
   }
 
-  if (text.includes("google") || text.includes("गूगल")) {
-    speak("Google खोलने की कोशिश कर रहा हूँ।");
-    setTimeout(() => {
-      window.location.href =
-        "intent://www.google.com/#Intent;scheme=https;package=com.google.android.googlequicksearchbox;end";
-    }, 700);
+  if (text.includes("गूगल") || text.includes("google")) {
+    speak("गूगल खोलने की कोशिश कर रहा हूँ।");
+    window.open("https://www.google.com", "_blank");
     return;
   }
 
-  if (text.includes("youtube") || text.includes("यूट्यूब")) {
-    speak("YouTube खोलने की कोशिश कर रहा हूँ।");
-    setTimeout(() => {
-      window.location.href =
-        "intent://www.youtube.com/#Intent;scheme=https;package=com.google.android.youtube;end";
-    }, 700);
+  if (text.includes("यूट्यूब") || text.includes("youtube")) {
+    speak("यूट्यूब खोलने की कोशिश कर रहा हूँ।");
+    window.open("https://www.youtube.com", "_blank");
     return;
   }
 
-  try {
-    const result = calculate(text);
-    if (result !== null) {
-      speak("जवाब है " + result);
-      return;
-    }
-  } catch (e) {
-    speak(e.message);
-    return;
-  }
-  const offlineAnswer = alisOfflineBrain(text);
-if (offlineAnswer !== null) {
-speak("जवाब है " + offlineAnswer);
-return;
-}
-    if (
-  text.includes("तुम मुझे कैसे जानती हो") ||
-  text.includes("आप मुझे कैसे जानते हो") ||
-  text.includes("तुम मेरे बारे में कैसे जानती हो")
-) {
-  speak("Ashish, मैं आपको हमारी बातचीत में आपके द्वारा बताई गई बातों से जानती हूँ। मैं आपके बारे में वही जानती हूँ जो आपने मुझे बताया है।");
-  return;
-}
-
-if (
-  text.includes("तुम कौन हो") ||
-  text.includes("आप कौन हो") ||
-  text.includes("तुम्हारा नाम") ||
-  text.includes("अपना परिचय दो") ||
-  text.includes("तुम क्या कर सकते") ||
-  text.includes("तुम क्या कर सकती")
-) {
-  speak("नमस्ते! मैं ALIS हूँ। मैं आपकी AI सहायक हूँ और आपकी मदद करने के लिए तैयार हूँ।");
-  return;
-}
-
-if (text.includes("तुम कैसी हो") || text.includes("कैसे हो")) {
-  speak("मैं अच्छी हूँ, Ashish! आपसे बात करके खुशी हो रही है। बताइए, आज मैं आपकी क्या मदद करूँ?");
-  return;
-}
-  
-  if (text.includes("मेरा नाम क्या है") || text.includes("मेरा नाम बताओ")) {
-    speak("आपने मुझे बताया है कि आपका नाम Ashish है।");
+  const result = calculate(text);
+  if (result !== null) {
+    speak("जवाब है " + result);
     return;
   }
 
-  if (text.includes("तुम्हें किसने बनाया") || text.includes("तुम्हारा निर्माता कौन है")) {
-    speak("मुझे Ashish ने अपने मोबाइल पर बनाना शुरू किया है। मुझे अभी और बेहतर बनाया जा रहा है।");
-    return;
-  }
-        if (text.includes("क्या तुम मेरी मदद करोगी")) {
-    speak("हाँ Ashish! मैं आपकी मदद करने के लिए तैयार हूँ। बताइए, आपको किस काम में मदद चाहिए।");
-    return;
-  }
-
-  if (text.includes("मुझे सफलता कैसे मिलेगी")) {
-    speak("Ashish, अपने लक्ष्य को छोटे-छोटे कामों में बाँटिए और हर दिन एक कदम आगे बढ़िए। मैं आपकी योजना बनाने में मदद कर सकती हूँ।");
-    return;
-  }
-
-  if (
-  text.includes("धन्यवाद") ||
-  text.includes("शुक्रिया") ||
-  text.includes("थैंक यू") ||
-  text.includes("thank you") ||
-  text.includes("thanks") ||
-    text.includes("थैंक्स") ||
-  text.includes("थैंक")
-) {
-  speak("आपका स्वागत है Ashish! बताइए, अब हम क्या सीखें।");
-  return;
-}
-  speak("माफ़ कीजिए, मैं यह सवाल अभी नहीं समझ पाया। आप समय, तारीख, सप्ताह के दिन या गणित का सवाल पूछ सकते हैं।");
+  speak("मैंने सुना: " + raw + "। यह आदेश अभी मेरी सूची में नहीं है।");
 }
 
 function startListening() {
   if (!SpeechRecognition) {
-    speak("आपके ब्राउज़र में आवाज़ पहचानने की सुविधा उपलब्ध नहीं है। कृपया Chrome में खोलें।");
-    return;
-  }
-
-  if (recognition) {
-    try { recognition.abort(); } catch (e) {}
-  }
-
-  recognition = new SpeechRecognition();
-  recognition.lang = "hi-IN";
-  recognition.continuous = false;
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 3;
-
-  recognition.onstart = () => {
-    listening = true;
-    startOrbMic();
-    const orb = document.getElementById("alisOrb");
-if (orb) {
-  orb.classList.remove("speaking");
-  orb.classList.add("listening");
-}
-    statusBox.textContent = "सुन रहा हूँ… अब बोलिए।";
-    listenBtn.textContent = "🎙️ सुन रहा हूँ…";
-  };
-
-  recognition.onresult = (event) => {
-    const alternatives = Array.from(event.results[0]);
-    const transcript = alternatives[0].transcript;
-    const orb = document.getElementById("alisOrb");
-
-if (orb) {
-  orb.classList.remove("scatter");
-  void orb.offsetWidth;
-  orb.classList.add("scatter");
-  setTimeout(() => orb.classList.remove("scatter"), 750);
-}
-    console.log("ALIS ने सुना:", transcript);
-    statusBox.textContent = "आपने कहा: " + transcript;
-    runCommand(transcript);
-  };
-
-  recognition.onerror = (event) => {
-    listening = false;
-    listenBtn.textContent = "🎙️ बोलिए — ALIS सुन रहा है";
-    statusBox.textContent = "आवाज़ पहचानने में समस्या: " + event.error;
-  };
-
-  recognition.onend = () => {
-  listening = false;
-  listenBtn.textContent = "🎙️ बोलिए — ALIS सुन रहा है";
-
-  const orb = document.getElementById("alisOrb");
-  if (orb) {
-    orb.classList.remove("listening");
-  }
-};
-
-  try {
-    recognition.start();
-  } catch (e) {
-    statusBox.textContent = "दोबारा शुरू करने से पहले कुछ क्षण रुकिए।";
-  }
-}
-  alert("ALIS का JavaScript चल रहा है");
-listenBtn.addEventListener("click", () => {
-  statusBox.textContent = "बटन काम कर रहा है। माइक्रोफोन शुरू करने की कोशिश हो रही है…";
-  alert("बोलिए बटन दबा!");
-  startListening();
-});
-stopBtn.addEventListener("click", () => {
-  if (recognition) {
-    try { recognition.abort(); } catch (e) {}
-  }
-  window.speechSynthesis.cancel();
-  listening = false;
-  speaking = false;
-  statusBox.textContent = "आवाज़ बंद है।";
-  listenBtn.textContent = "🎙️ बोलिए — ALIS सुन रहा है";
-});
-
-  function playJosh() {
-  const audio = document.getElementById("joshAudio");
-  const status = document.getElementById("status");
-
-  audio.play()
-    .then(() => {
-      status.textContent = "Josh की आवाज़ चल रही है।";
-    })
-    .catch(() => {
-      status.textContent = "ऑडियो नहीं चल रहा है।";
-    });
-  }
-  function startListening() {
-  if (!SpeechRecognition) {
-    speak("आपके ब्राउज़र में आवाज़ पहचानने की सुविधा उपलब्ध नहीं है। कृपया Chrome में खोलें।");
-    return;
-  }
-
-  if (recognition) {
-    try {
-      recognition.abort();
-    } catch (e) {}
-  }
-
-  recognition = new SpeechRecognition();
-  recognition.lang = "hi-IN";
-  recognition.continuous = false;
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 3;
-
-  recognition.onstart = () => {
-    listening = true;
-    startOrbMic();
-    statusBox.textContent = "ALIS सुन रहा है। अब बोलिए।";
-  };
-
-  recognition.onresult = (event) => {
-    const raw = event.results[0][0].transcript;
-    statusBox.textContent = "आपने कहा: " + raw;
-    runCommand(raw);
-  };
-
-  recognition.onerror = (event) => {
-    listening = false;
     statusBox.textContent =
-      "आवाज़ पहचानने में समस्या: " + event.error;
-  };
+      "इस ब्राउज़र में आवाज़ पहचान उपलब्ध नहीं है। Chrome में कोशिश करें।";
+    return;
+  }
 
-  recognition.onend = () => {
-    listening = false;
-  };
+  if (listening) {
+    statusBox.textContent = "ALIS पहले से सुन रहा है।";
+    return;
+  }
 
   try {
+    recognition = new SpeechRecognition();
+    recognition.lang = "hi-IN";
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      listening = true;
+      orb.classList.add("listening");
+      listenBtn.textContent = "🎙️ सुन रहा हूँ…";
+      statusBox.textContent = "ALIS सुन रहा है। अब बोलिए।";
+    };
+
+    recognition.onresult = event => {
+      const transcript = event.results[0][0].transcript;
+      statusBox.textContent = "आपने कहा: " + transcript;
+      runCommand(transcript);
+    };
+
+    recognition.onerror = event => {
+      statusBox.textContent = "माइक्रोफ़ोन/आवाज़ की समस्या: " + event.error;
+    };
+
+    recognition.onend = () => {
+      listening = false;
+      orb.classList.remove("listening");
+      listenBtn.textContent = "🎙️ बोलिए — ALIS सुन रहा है";
+    };
+
     recognition.start();
   } catch (error) {
-    statusBox.textContent = "माइक्रोफ़ोन शुरू नहीं हो पाया। दोबारा कोशिश करें।";
+    listening = false;
+    statusBox.textContent = "माइक्रोफ़ोन शुरू नहीं हो पाया। फिर कोशिश करें।";
   }
-  }
-  
-function alisOfflineBrain(text) {
-  let q = text.toLowerCase().trim();
-
-  // गणित: जोड़, घटाव, गुणा और भाग
-  let math = q.match(/(-?\d+(?:\.\d+)?)\s*([+\-*/])\s*(-?\d+(?:\.\d+)?)/);
-
-  if (math) {
-    let a = Number(math[1]);
-    let op = math[2];
-    let b = Number(math[3]);
-
-    if (op === "+") return a + b;
-    if (op === "-") return a - b;
-    if (op === "*") return a * b;
-    if (op === "/") {
-      if (b === 0) return "शून्य से भाग नहीं दिया जा सकता।";
-      return a / b;
-    }
-  }
-
-  // आसान हिंदी गणित
-  let hindiMath = q.match(/(-?\d+)\s*(जोड़|प्लस|माइनस|गुणा|गुना|भाग)\s*(-?\d+)/);
-
-  if (hindiMath) {
-    let a = Number(hindiMath[1]);
-    let op = hindiMath[2];
-    let b = Number(hindiMath[3]);
-
-    if (op === "जोड़" || op === "प्लस") return a + b;
-    if (op === "माइनस") return a - b;
-    if (op === "गुणा" || op === "गुना") return a * b;
-    if (op === "भाग") {
-      return b === 0 ? "शून्य से भाग नहीं दिया जा सकता।" : a / b;
-    }
-  }
-
-  // सामान्य ज्ञान
-  if (q.includes("भारत की राजधानी")) return "भारत की राजधानी नई दिल्ली है।";
-  if (q.includes("बिहार की राजधानी")) return "बिहार की राजधानी पटना है।";
-  if (q.includes("तुम्हारा नाम") || q.includes("तुम कौन हो")) return "मेरा नाम ALIS है।";
-  if (q.includes("नमस्ते") || q.includes("नमस्कार")) return "नमस्ते! मैं ALIS हूँ। बताइए, मैं आपकी क्या मदद करूँ?";
-  if (q.includes("प्रकाश संश्लेषण")) return "प्रकाश संश्लेषण वह प्रक्रिया है जिसमें हरे पौधे सूर्य के प्रकाश की मदद से अपना भोजन बनाते हैं।";
-
-  return null;
 }
 
-stopBtn.onclick = function () {
+listenBtn.addEventListener("click", startListening);
+
+stopBtn.addEventListener("click", () => {
   if (recognition) {
-    try {
-      recognition.abort();
-    } catch (e) {}
+    try { recognition.abort(); } catch (error) {}
   }
 
-  window.speechSynthesis.cancel();
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+
   listening = false;
+  speaking = false;
+  orb.classList.remove("listening", "speaking");
+  listenBtn.textContent = "🎙️ बोलिए — ALIS सुन रहा है";
   statusBox.textContent = "आवाज़ बंद है।";
-};
-  alert("ALIS परीक्षण");
+});
 </script>
-  
-<button type="button" onclick="playJosh()">🔊 Josh की आवाज़ सुनें</button>
-
-<audio id="joshAudio" preload="auto" src="https://drive.google.com/uc?export=download&id=17n9ipXjBpAM6NhwJtYaYhfUAFkMaCpyo"></audio>
-
 </body>
 </html>
