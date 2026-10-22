@@ -119,18 +119,21 @@ select {
   /* ALIS AI ORB */
 .alis-orb {
   width: 180px;
-  height: 180px;
+  height: 180px; 
+background: radial-gradient(
+  circle at 50% 50%,
+  #ffffff 0%,
+  #f0f4ff 12%,
+  #aabaff 24%,
+  #29234b 48%,
+  #050505 72%,
+  #000000 100%
+);
+
   margin: 20px auto 25px;
   position: relative;
   border-radius: 50%;
   overflow: hidden;
-  background: radial-gradient(
-    circle at 50% 50%,
-    #111 0%,
-    #050505 55%,
-    #000 75%,
-    transparent 100%
-  );
   box-shadow:
     0 0 25px rgba(150, 170, 255, 0.18),
     inset 0 0 25px rgba(255, 255, 255, 0.08);
