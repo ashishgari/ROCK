@@ -245,16 +245,36 @@ function speak(message) {
     orb.classList.add("speaking");
   };
 
-  utterance.onend = () => {
-    speaking = false;
-    orb.classList.remove("speaking");
-  };
+  
+utterance.onend = () => {
+  speaking = false;
+  orb.classList.remove("speaking");
 
-  utterance.onerror = () => {
-    speaking = false;
-    orb.classList.remove("speaking");
-    statusBox.textContent = "आवाज़ चलाने में समस्या हुई।";
-  };
+  if (autoListen && !listening) {
+    setTimeout(() => {
+      if (autoListen && !speaking && !listening) {
+        startListening();
+      }
+    }, 1000);
+  }
+};
+  
+
+  
+utterance.onerror = () => {
+  speaking = false;
+  orb.classList.remove("speaking");
+  statusBox.textContent = "आवाज़ चलाने में समस्या हुई।";
+
+  if (autoListen && !listening) {
+    setTimeout(() => {
+      if (autoListen && !speaking && !listening) {
+        startListening();
+      }
+    }, 1000);
+  }
+};
+  
 
   window.speechSynthesis.speak(utterance);
 }
@@ -493,11 +513,21 @@ function startListening() {
       statusBox.textContent = "माइक्रोफ़ोन/आवाज़ की समस्या: " + event.error;
     };
 
-    recognition.onend = () => {
-      listening = false;
-      orb.classList.remove("listening");
-      listenBtn.textContent = "🎙️ बोलिए — ALIS सुन रहा है";
-    };
+    
+recognition.onend = () => {
+  listening = false;
+  orb.classList.remove("listening");
+  listenBtn.textContent = "🎙️ बोलिए — ALIS सुन रहा है";
+
+  if (autoListen && !speaking) {
+    setTimeout(() => {
+      if (autoListen && !speaking && !listening) {
+        startListening();
+      }
+    }, 1000);
+  }
+};
+    
 
     recognition.start();
   } catch (error) {
@@ -509,6 +539,7 @@ function startListening() {
 listenBtn.addEventListener("click", startListening);
 
 stopBtn.addEventListener("click", () => {
+  autoListen = false;
   if (recognition) {
     try { recognition.abort(); } catch (error) {}
   }
