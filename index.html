@@ -178,6 +178,7 @@ let recognition = null;
 let listening = false;
 let speaking = false;
 let availableVoices = [];
+let autoListen = true;
 
 function loadVoices() {
   if (!("speechSynthesis" in window)) {
@@ -536,7 +537,10 @@ recognition.onend = () => {
   }
 }
 
-listenBtn.addEventListener("click", startListening);
+listenBtn.addEventListener("click", () => {
+  autoListen = true;
+  startListening();
+});
 
 stopBtn.addEventListener("click", () => {
   autoListen = false;
