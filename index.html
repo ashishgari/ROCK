@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ALIS Voice Assistant</title>
-
 <style>
 * { box-sizing: border-box; }
 
@@ -138,13 +137,22 @@ select {
   border-radius: 12px;
   background: #1a2340;
 }
+  #listenBtn,
+#stopBtn,
+#voiceSelect,
+#previewVoiceBtn,
+#status,
+#answer,
+.container > p {
+  display: none;
+}
 </style>
 </head>
 
 <body>
 <div class="container">
-  <div id="alisOrb"></div>
   <h1>ALIS</h1>
+<div id="alisOrb"></div>
   <p>आपका हिंदी वॉइस असिस्टेंट</p>
 
   <button id="listenBtn">🎙️ बोलिए — ALIS सुन रहा है</button>
@@ -536,7 +544,10 @@ recognition.onend = () => {
     statusBox.textContent = "माइक्रोफ़ोन शुरू नहीं हो पाया। फिर कोशिश करें।";
   }
 }
-
+orb.addEventListener("click", () => {
+  autoListen = true;
+  startListening();
+});
 listenBtn.addEventListener("click", () => {
   autoListen = true;
   startListening();
