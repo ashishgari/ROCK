@@ -101,21 +101,32 @@ select {
 
 #alisOrb.listening {
   transform: scale(1.08);
-  box-shadow: 0 0 25px #66e5ff, 0 0 60px #168bff;
+  background: radial-gradient(circle,
+    #ffffff 0%,
+    #e0ffff 10%,
+    #00eaff 25%,
+    #087cff 50%,
+    #050b20 75%);
+  box-shadow:
+    0 0 25px #66e5ff,
+    0 0 60px #168bff,
+    inset 0 0 40px #00eaff;
 }
 
 #alisOrb.speaking {
-  box-shadow: 0 0 25px #bd79ff, 0 0 60px #7250ff;
+  transform: scale(1.12);
+  background: radial-gradient(circle,
+    #ffffff 0%,
+    #f2ddff 10%,
+    #c879ff 25%,
+    #7250ff 50%,
+    #050b20 75%);
+  box-shadow:
+    0 0 30px #bd79ff,
+    0 0 70px #7250ff,
+    inset 0 0 40px #bd79ff;
 }
 
-#alisOrb.listening {
-  transform: scale(1.08);
-  box-shadow: 0 0 45px #66e5ff;
-}
-
-#alisOrb.speaking {
-  box-shadow: 0 0 45px #bd79ff;
-}
 
 #status, #answer {
   overflow-wrap: anywhere;
