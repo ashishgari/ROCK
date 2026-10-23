@@ -367,8 +367,33 @@ function calculate(text) {
   }
 }
 
+
 function runCommand(raw) {
-  const text = raw.toLowerCase().trim();
+  let text = raw.toLowerCase().trim();
+
+  // आदेश में ALIS का नाम होना अनिवार्य है
+  const wakeName = /alis|अलिस|एलिस/i;
+
+  if (!wakeName.test(text)) {
+    answerBox.textContent = "मुझे ALIS नाम से बुलाइए।";
+    statusBox.textContent = "ALIS नाम नहीं पहचाना गया।";
+    return;
+  }
+
+  // नाम हटाकर बाकी आदेश पढ़ें
+  text = text
+    .replace(/alis/gi, "")
+    .replace(/अलिस/g, "")
+    .replace(/एलिस/g, "")
+    .replace(/[,\s]+/g, " ")
+    .trim();
+
+  // केवल नाम बुलाया गया हो
+  if (!text) {
+    speak("जी, मैं सुन रही हूँ। बताइए क्या करना है?");
+    return;
+  }
+  
 
   if (text.includes("good morning") || text.includes("गुड मॉर्निंग") ||
       text.includes("सुप्रभात")) {
