@@ -55,13 +55,57 @@ select {
 }
 
 #alisOrb {
-  width: 150px;
-  height: 150px;
-  margin: 20px auto;
+  width: 170px;
+  height: 170px;
+  margin: 25px auto;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #b4f4ff, #536cff 40%, #21104f 75%);
-  box-shadow: 0 0 35px #536cff;
-  transition: transform .2s;
+  position: relative;
+  background:
+    radial-gradient(circle,
+      #ffffff 0%,
+      #8df7ff 8%,
+      #218dff 22%,
+      #102b70 48%,
+      #050b20 70%);
+  border: 2px solid #72eaff;
+  box-shadow:
+    0 0 15px #00d9ff,
+    0 0 35px #1678ff,
+    inset 0 0 25px #42cfff;
+  transition: transform .3s, box-shadow .3s;
+}
+
+#alisOrb::before,
+#alisOrb::after {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: #50f5ff;
+  border-bottom-color: #536cff;
+  animation: orbSpin 4s linear infinite;
+}
+
+#alisOrb::after {
+  inset: -22px;
+  border-top-color: #8b7bff;
+  border-bottom-color: #00d9ff;
+  animation-duration: 7s;
+  animation-direction: reverse;
+}
+
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
+}
+
+#alisOrb.listening {
+  transform: scale(1.08);
+  box-shadow: 0 0 25px #66e5ff, 0 0 60px #168bff;
+}
+
+#alisOrb.speaking {
+  box-shadow: 0 0 25px #bd79ff, 0 0 60px #7250ff;
 }
 
 #alisOrb.listening {
