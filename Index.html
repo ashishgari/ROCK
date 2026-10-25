@@ -1,1 +1,378 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Voice Studio</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #080d1b;
+  color: #fff;
+  padding: 20px;
+}
+
+.app {
+  max-width: 650px;
+  margin: auto;
+}
+
+header {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.logo {
+  font-size: 42px;
+  color: #61e7ff;
+}
+
+h1 { margin: 8px 0; }
+
+.subtitle {
+  color: #aab6d3;
+  font-size: 14px;
+}
+
+.panel {
+  background: #121b30;
+  border: 1px solid #263755;
+  border-radius: 18px;
+  padding: 18px;
+  margin: 16px 0;
+}
+
+h2 {
+  font-size: 18px;
+  margin-top: 0;
+}
+
+.voices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.voice {
+  background: #17243c;
+  border: 1px solid #334563;
+  border-radius: 14px;
+  padding: 14px 10px;
+  text-align: left;
+  color: white;
+  cursor: pointer;
+}
+
+.voice.selected {
+  border: 2px solid #61e7ff;
+  background: #18364a;
+}
+
+.voice strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.voice small {
+  color: #b8c7e2;
+}
+
+button, select, textarea {
+  font: inherit;
+}
+
+button { touch-action: manipulation; }
+
+.action {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 14px;
+  background: #61e7ff;
+  color: #07101b;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.secondary {
+  background: #273752;
+  color: white;
+}
+
+label {
+  display: block;
+  margin: 14px 0 8px;
+  color: #d6e1f5;
+}
+
+select, textarea, input[type="range"] {
+  width: 100%;
+}
+
+select, textarea {
+  background: #091326;
+  border: 1px solid #334563;
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.status {
+  color: #9fe9ff;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+footer {
+  color: #8797b7;
+  text-align: center;
+  font-size: 12px;
+  padding: 20px 0;
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header>
+  <div class="logo">◉</div>
+  <h1>AI Voice Studio</h1>
+  <p class="subtitle">Apni pasand ki awaaz chuniye aur suniye</p>
+</header>
+
+<section class="panel">
+  <h2>🎙️ Voice Collection</h2>
+  <p class="subtitle">
+    Awaaz chunein. Asli available voices aapke browser par nirbhar hain.
+  </p>
+
+  <div class="voices" id="voiceCards">
+    <button class="voice selected" data-style="female">
+      <strong>✨ Female Voice</strong>
+      <small>Mahila awaaz</small>
+    </button>
+    <button class="voice" data-style="male">
+      <strong>🎧 Male Voice</strong>
+      <small>Purush awaaz</small>
+    </button>
+    <button class="voice" data-style="soft">
+      <strong>🌙 Soft Voice</strong>
+      <small>Naram andaaz</small>
+    </button>
+    <button class="voice" data-style="energetic">
+      <strong>⚡ Energetic Voice</strong>
+      <small>Joshila andaaz</small>
+    </button>
+  </div>
+
+  <label for="language">Bhasha</label>
+  <select id="language">
+    <option value="hi-IN">Hindi</option>
+    <option value="en-US">English (US)</option>
+    <option value="en-GB">English (UK)</option>
+  </select>
+
+  <label for="availableVoices">Device ki available awaazein</label>
+  <select id="availableVoices">
+    <option value="">Awaazein load ho rahi hain...</option>
+  </select>
+
+  <label for="speed">Bolne ki speed: <span id="speedValue">1.0</span></label>
+  <input id="speed" type="range" min="0.6" max="1.4" step="0.1" value="1">
+
+  <label for="sample">Sunne ke liye text</label>
+  <textarea id="sample">Namaste! Main AI Voice Studio hoon. Aap apni pasand ki awaaz yahan sun sakte hain.</textarea>
+
+  <button class="action" id="preview">▶ Awaaz Suniye</button>
+  <button class="action secondary" id="save">💾 Pasand Save Karein</button>
+
+  <p class="status" id="status" aria-live="polite">
+    Taiyar. Apni awaaz chuniye.
+  </p>
+</section>
+
+<section class="panel">
+  <h2>🔌 Agla Vikas</h2>
+  <p class="subtitle">
+    Is prototype mein browser ki awaazein istemal hoti hain.
+    ElevenLabs jaisi premium AI voices ke liye baad mein surakshit
+    API connection jodna hoga. API key ko is HTML file mein nahi rakhenge.
+  </p>
+</section>
+
+<footer>AI Voice Studio · Version 1.0</footer>
+</div>
+
+<script>
+const cards = document.querySelectorAll(".voice");
+const language = document.getElementById("language");
+const voiceList = document.getElementById("availableVoices");
+const sample = document.getElementById("sample");
+const speed = document.getElementById("speed");
+const speedValue = document.getElementById("speedValue");
+const statusBox = document.getElementById("status");
+
+let selectedStyle = "female";
+let available = [];
+
+function loadVoices() {
+  if (!("speechSynthesis" in window)) {
+    statusBox.textContent =
+      "Is browser mein speech support nahi mil raha.";
+    return;
+  }
+
+  available = speechSynthesis.getVoices();
+  const langPrefix = language.value.toLowerCase().split("-")[0];
+  const matching = available.filter(v =>
+    v.lang.toLowerCase().startsWith(langPrefix)
+  );
+  const choices = matching.length ? matching : available;
+
+  voiceList.innerHTML = "";
+
+  if (!choices.length) {
+    voiceList.add(new Option(
+      "Koi voice abhi nahi mili", ""
+    ));
+    return;
+  }
+
+  choices.forEach(v => {
+    const option = new Option(v.name + " (" + v.lang + ")", v.name);
+    voiceList.add(option);
+  });
+}
+
+cards.forEach(card => {
+  card.addEventListener("click", () => {
+    cards.forEach(c => c.classList.remove("selected"));
+    card.classList.add("selected");
+    selectedStyle = card.dataset.style;
+    statusBox.textContent =
+      card.querySelector("strong").textContent + " chuni gayi.";
+  });
+});
+
+language.addEventListener("change", loadVoices);
+
+if ("speechSynthesis" in window) {
+  speechSynthesis.onvoiceschanged = loadVoices;
+  loadVoices();
+}
+
+speed.addEventListener("input", () => {
+  speedValue.textContent = Number(speed.value).toFixed(1);
+});
+
+document.getElementById("preview").addEventListener("click", () => {
+  if (!("speechSynthesis" in window)) {
+    statusBox.textContent =
+      "Aapke browser mein voice support available nahi hai.";
+    return;
+  }
+
+  const text = sample.value.trim();
+  if (!text) {
+    statusBox.textContent = "Pehle sunne ke liye kuch likhiye.";
+    return;
+  }
+
+  speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = language.value;
+  utterance.rate = Number(speed.value);
+
+  const langPrefix = language.value.toLowerCase().split("-")[0];
+  const matching = available.filter(v =>
+    v.lang.toLowerCase().startsWith(langPrefix)
+  );
+  const choices = matching.length ? matching : available;
+
+  if (voiceList.value) {
+    utterance.voice =
+      choices.find(v => v.name === voiceList.value) ||
+      available.find(v => v.name === voiceList.value) || null;
+  } else if (choices.length) {
+    const preferred = choices.find(v =>
+      selectedStyle === "female"
+        ? /female|woman|zira|samantha|heera/i.test(v.name)
+        : selectedStyle === "male"
+        ? /male|man|david|mark|ravi/i.test(v.name)
+        : false
+    );
+    utterance.voice = preferred || choices[0];
+  }
+
+  utterance.onstart = () => {
+    statusBox.textContent = "Awaaz chal rahi hai...";
+  };
+  utterance.onend = () => {
+    statusBox.textContent = "Sunna poora hua.";
+  };
+  utterance.onerror = () => {
+    statusBox.textContent =
+      "Awaaz nahi chali. Browser aur phone ki voice settings check karein.";
+  };
+
+  speechSynthesis.speak(utterance);
+});
+
+document.getElementById("save").addEventListener("click", () => {
+  const settings = {
+    style: selectedStyle,
+    language: language.value,
+    voice: voiceList.value,
+    speed: speed.value
+  };
+
+  try {
+    localStorage.setItem("voiceStudioSettings", JSON.stringify(settings));
+    statusBox.textContent =
+      "Pasand is browser mein save ho gayi.";
+  } catch (error) {
+    statusBox.textContent =
+      "Save nahi ho saka. Browser storage ki permission check karein.";
+  }
+});
+
+try {
+  const saved = JSON.parse(
+    localStorage.getItem("voiceStudioSettings") || "null"
+  );
+
+  if (saved) {
+    selectedStyle = saved.style || "female";
+    cards.forEach(card => {
+      card.classList.toggle(
+        "selected",
+        card.dataset.style === selectedStyle
+      );
+    });
+    language.value = saved.language || "hi-IN";
+    speed.value = saved.speed || "1";
+    speedValue.textContent = Number(speed.value).toFixed(1);
+    loadVoices();
+    if (saved.voice) voiceList.value = saved.voice;
+  }
+} catch (error) {
+  // App can still be used if saved settings are unavailable.
+}
+</script>
+</body>
+</html>
+
 
