@@ -302,20 +302,24 @@ document.getElementById("preview").addEventListener("click", () => {
   );
   const choices = matching.length ? matching : available;
 
-  if (voiceList.value) {
-    utterance.voice =
-      choices.find(v => v.name === voiceList.value) ||
-      available.find(v => v.name === voiceList.value) || null;
-  } else if (choices.length) {
-    const preferred = choices.find(v =>
-      selectedStyle === "female"
-        ? /female|woman|zira|samantha|heera/i.test(v.name)
-        : selectedStyle === "male"
-        ? /male|man|david|mark|ravi/i.test(v.name)
-        : false
-    );
-    utterance.voice = preferred || choices[0];
-  }
+  const preferred = choices.find(v =>
+  selectedStyle === "female"
+    ? /female|woman|zira|samantha|heera/i.test(v.name)
+    : selectedStyle === "male"
+    ? /male|man|david|mark|ravi/i.test(v.name)
+    : false
+);
+
+if (preferred) {
+  utterance.voice = preferred;
+} else if (voiceList.value) {
+  utterance.voice =
+    choices.find(v => v.name === voiceList.value) ||
+    available.find(v => v.name === voiceList.value) ||
+    null;
+} else if (choices.length) {
+  utterance.voice = choices[0];
+}
 
   utterance.onstart = () => {
     statusBox.textContent = "Awaaz chal rahi hai...";
