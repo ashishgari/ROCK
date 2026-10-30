@@ -170,6 +170,7 @@ select {
 
 <script>
 "use strict";
+  const ALIS_API_URL = "https://script.google.com/macros/s/AKfycbzDbb_SGoQgiZYPAgH6uejnlK4UD9rRTykqu5uUjkAgI93qZ7wZuzAzH_D7xyLAqodanQ/exec";
 
 const statusBox = document.getElementById("status");
 const answerBox = document.getElementById("answer");
@@ -178,6 +179,27 @@ const stopBtn = document.getElementById("stopBtn");
 const voiceSelect = document.getElementById("voiceSelect");
 const previewVoiceBtn = document.getElementById("previewVoiceBtn");
 const orb = document.getElementById("alisOrb");
+  function askAlisAI(question) {
+  const callbackName = "alisCallback";
+
+  window.alisCallback = function(data) {
+    const answer = data.answer || "अभी जवाब नहीं मिला।";
+    answerBox.textContent = answer;
+    speak(answer);
+  };
+
+  const script = document.createElement("script");
+  script.src = ALIS_API_URL +
+    "?question=" + encodeURIComponent(question) +
+    "&callback=" + callbackName;
+
+  script.onerror = function() {
+    answerBox.textContent = "ALIS इंटरनेट से नहीं जुड़ पाया।";
+    speak("इंटरनेट से जुड़ने में समस्या हुई।");
+  };
+
+  document.body.appendChild(script);
+  }
 
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -483,7 +505,7 @@ function runCommand(raw) {
     return;
   }
 
-  speak("मैंने सुना: " + raw + "। यह आदेश अभी मेरी सूची में नहीं है।");
+  askAlisAI(raw);
 }
 
 function startListening() {
