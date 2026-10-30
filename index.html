@@ -259,6 +259,7 @@ function speak(message) {
   window.speechSynthesis.cancel();
 
   const utterance = new SpeechSynthesisUtterance(message);
+  console.log("ALIS TEXT:", message);
   const selectedVoice = availableVoices[Number(voiceSelect.value)];
 
   if (selectedVoice) {
