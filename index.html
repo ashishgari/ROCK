@@ -419,30 +419,73 @@ function calculate(text) {
   }
 }
 
-
+let commandMode = false;
+let numberMode = false;
+let collectedNumber = "";
+  
 function runCommand(raw) {
   let text = raw.toLowerCase().trim();
 
-  // आदेश में ALIS का नाम होना अनिवार्य है
   const wakeName = /alis|अलिस|एलिस/i;
 
-  if (!wakeName.test(text)) {
-    answerBox.textContent = "मुझे ALIS नाम से बुलाइए।";
-    statusBox.textContent = "ALIS नाम नहीं पहचाना गया।";
+  // नंबर लिखने का मोड
+  if (numberMode) {
+    if (/बस|हो गया|लिखना बंद करो|समाप्त/i.test(text)) {
+      numberMode = false;
+      speak("सर, आपका नंबर है " + collectedNumber);
+      collectedNumber = "";
+      return;
+    }
+
+    const digitWords = {
+      "शून्य": "0", "जीरो": "0",
+      "एक": "1", "दो": "2", "तीन": "3",
+      "चार": "4", "पाँच": "5", "पांच": "5",
+      "छह": "6", "सात": "7", "आठ": "8", "नौ": "9"
+    };
+
+    for (const word in digitWords) {
+      text = text.replaceAll(word, digitWords[word]);
+    }
+
+    const digits = text.replace(/\s/g, "");
+
+    if (/^\d+$/.test(digits)) {
+      collectedNumber += digits;
+      speak("हूँ, आगे बताइए।");
+    } else {
+      speak("सर, कृपया नंबर बताइए।");
+    }
     return;
   }
 
-  // नाम हटाकर बाकी आदेश पढ़ें
-  text = text
-    .replace(/alis/gi, "")
-    .replace(/अलिस/g, "")
-    .replace(/एलिस/g, "")
-    .replace(/[,\s]+/g, " ")
-    .trim();
+  // ALIS नाम सुनने पर सक्रिय होना
+  if (!commandMode) {
+    if (!wakeName.test(text)) return;
 
-  // केवल नाम बुलाया गया हो
-  if (!text) {
-    speak("जी, मैं सुन रही हूँ। बताइए क्या करना है?");
+    text = text
+      .replace(/alis|अलिस|एलिस/gi, "")
+      .replace(/[,\s]+/g, " ")
+      .trim();
+
+    if (!text) {
+      commandMode = true;
+      speak("हाँ सर, मैं आपकी बात सुन रहा हूँ।");
+      return;
+    }
+  } else {
+    text = text
+      .replace(/alis|अलिस|एलिस/gi, "")
+      .trim();
+    commandMode = false;
+  }
+
+  // नंबर लिखने का आदेश
+  if (text.includes("नंबर लिखो") ||
+      text.includes("नंबर लिखना")) {
+    numberMode = true;
+    collectedNumber = "";
+    speak("हाँ सर, मैं लिख रहा हूँ। आप नंबर बताइए।");
     return;
   }
   
