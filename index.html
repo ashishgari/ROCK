@@ -448,9 +448,10 @@ function runCommand(raw) {
       text = text.replaceAll(word, digitWords[word]);
     }
 
-    const digits = text.replace(/\s/g, "");
+    text = text.replace(/टू|two|to/gi, "2");
+const digits = text.replace(/[^\d]/g, "");
 
-    if (/^\d+$/.test(digits)) {
+    if (digits.length > 0) {
       collectedNumber += digits;
       speak("हूँ, आगे बताइए।");
     } else {
