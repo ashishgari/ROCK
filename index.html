@@ -462,25 +462,38 @@ const digits = text.replace(/[^\d]/g, "");
   }
 
   // ALIS नाम सुनने पर सक्रिय होना
-  if (!commandMode) {
-    if (!wakeName.test(text)) return;
+  // ALIS Wake Word और Conversation Mode
+if (!commandMode) {
+  if (!wakeName.test(text)) return;
 
-    text = text
-      .replace(/alis|अलिस|एलिस/gi, "")
-      .replace(/[,\s]+/g, " ")
-      .trim();
+  text = text
+    .replace(/alis|अलिस|एलिस/gi, "")
+    .replace(/[,\s]+/g, " ")
+    .trim();
 
-    if (!text) {
-      commandMode = true;
-      speak("हाँ सर, मैं आपकी बात सुन रहा हूँ।");
-      return;
-    }
-  } else {
-    text = text
-      .replace(/alis|अलिस|एलिस/gi, "")
-      .trim();
-    commandMode = false;
+  commandMode = true;
+
+  if (!text) {
+    speak("हाँ सर, मैं आपकी बात सुन रहा हूँ।");
+    return;
   }
+} else {
+  text = text
+    .replace(/alis|अलिस|एलिस/gi, "")
+    .trim();
+}
+
+// बातचीत समाप्त करने का आदेश
+if (
+  text.includes("अभी काम नहीं है") ||
+  text.includes("शांत हो जाओ") ||
+  text.includes("सो जाओ")
+) {
+  commandMode = false;
+  numberMode = false;
+  speak("ठीक है सर, मैं शांत हो रहा हूँ। मुझे फिर ALIS बोलकर बुला लीजिए।");
+  return;
+}
 
   // नंबर लिखने का आदेश
   if (text.includes("नंबर लिखो") ||
