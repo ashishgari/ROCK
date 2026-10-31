@@ -307,7 +307,7 @@ utterance.onerror = () => {
   }
 };
   
-
+speaking = true;
   window.speechSynthesis.speak(utterance);
 }
 
@@ -422,6 +422,7 @@ function calculate(text) {
 let commandMode = false;
 let numberMode = false;
 let collectedNumber = "";
+  let restartTimer = null;
   
 function runCommand(raw) {
   let text = raw.toLowerCase().trim();
@@ -552,7 +553,21 @@ const digits = text.replace(/[^\d]/g, "");
 
   askAlisAI(raw);
 }
+  
+function scheduleListening(delay = 800) {
+  if (restartTimer !== null) {
+    clearTimeout(restartTimer);
+  }
 
+  restartTimer = setTimeout(() => {
+    restartTimer = null;
+
+    if (autoListen && !speaking && !listening) {
+      startListening();
+    }
+  }, delay);
+}
+  
 function startListening() {
   if (!SpeechRecognition) {
     statusBox.textContent =
@@ -596,16 +611,12 @@ recognition.onend = () => {
   listenBtn.textContent = "🎙️ बोलिए — ALIS सुन रहा है";
 
   if (autoListen && !speaking) {
-    setTimeout(() => {
-      if (autoListen && !speaking && !listening) {
-        startListening();
-      }
-    }, 1000);
+  scheduleListening(800);
   }
 };
     
-
-    recognition.start();
+recognition.start();
+  
   } catch (error) {
     listening = false;
     statusBox.textContent = "माइक्रोफ़ोन शुरू नहीं हो पाया। फिर कोशिश करें।";
@@ -622,6 +633,10 @@ listenBtn.addEventListener("click", () => {
 
 stopBtn.addEventListener("click", () => {
   autoListen = false;
+  if (restartTimer !== null) {
+  clearTimeout(restartTimer);
+  restartTimer = null;
+  }
   if (recognition) {
     try { recognition.abort(); } catch (error) {}
   }
