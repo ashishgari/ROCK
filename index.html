@@ -183,8 +183,10 @@ const orb = document.getElementById("alisOrb");
   function checkAlisIdentity(question) {
   const q = question.toLowerCase();
 
-  if (/किसने बनाया|किसने बनाय|किसने बनाया है|who created|who made/i.test(q)) {
-    return "मुझे Ashish ने बनाया है। मेरा AI दिमाग Google Gemini से चलता है।";
+  if (
+  /किसने बनाया|किसने बनाय|किसने बनाया है|who created|who made|google ने तुम्हें बनाया|google ने बनाया|क्या google ने|गूगल ने तुम्हें बनाया|गूगल ने बनाया/i.test(q)
+) {
+  return "नहीं, मुझे Ashish ने बनाया है। मेरा AI दिमाग Google Gemini से चलता है।";
   }
 
   return null;
