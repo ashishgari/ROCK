@@ -153,6 +153,25 @@ select {
 <div class="container">
   <h1>ALIS</h1>
 <div id="alisOrb"></div>
+  <div id="conversationBox" style="
+  margin: 25px auto;
+  padding: 15px;
+  background: #202a46;
+  border: 1px solid #53638e;
+  border-radius: 15px;
+  text-align: left;
+  color: white;
+  min-height: 120px;
+  overflow-wrap: anywhere;
+">
+  <p>🗣️ आपने कहा:</p>
+  <div id="userText">अभी कोई सवाल नहीं।</div>
+
+  <hr style="border-color:#53638e">
+
+  <p>🤖 ALIS ने कहा:</p>
+  <div id="alisText">ALIS के जवाब यहाँ दिखाई देंगे।</div>
+</div>
   <p>आपका हिंदी वॉइस असिस्टेंट</p>
 
   <button id="listenBtn">🎙️ बोलिए — ALIS सुन रहा है</button>
@@ -174,6 +193,8 @@ select {
 
 const statusBox = document.getElementById("status");
 const answerBox = document.getElementById("answer");
+  const userText = document.getElementById("userText");
+const alisText = document.getElementById("alisText");
 const listenBtn = document.getElementById("listenBtn");
 const stopBtn = document.getElementById("stopBtn");
 const voiceSelect = document.getElementById("voiceSelect");
@@ -196,6 +217,7 @@ const orb = document.getElementById("alisOrb");
 
   if (identityAnswer) {
     answerBox.textContent = identityAnswer;
+    alisText.textContent = identityAnswer;
     speak(identityAnswer);
     return;
   }
@@ -204,6 +226,7 @@ const orb = document.getElementById("alisOrb");
   window.alisCallback = function(data) {
     const answer = data.answer || "अभी जवाब नहीं मिला।";
     answerBox.textContent = answer;
+    alisText.textContent = answer;
     speak(answer);
   };
 
@@ -628,6 +651,7 @@ function startListening() {
 
     recognition.onresult = event => {
       const transcript = event.results[0][0].transcript;
+      userText.textContent = transcript;
       statusBox.textContent = "आपने कहा: " + transcript;
       runCommand(transcript);
     };
