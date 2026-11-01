@@ -179,7 +179,24 @@ const stopBtn = document.getElementById("stopBtn");
 const voiceSelect = document.getElementById("voiceSelect");
 const previewVoiceBtn = document.getElementById("previewVoiceBtn");
 const orb = document.getElementById("alisOrb");
+  
+  function checkAlisIdentity(question) {
+  const q = question.toLowerCase();
+
+  if (/किसने बनाया|किसने बनाय|किसने बनाया है|who created|who made/i.test(q)) {
+    return "मुझे Ashish ने बनाया है। मेरा AI दिमाग Google Gemini से चलता है।";
+  }
+
+  return null;
+  }
   function askAlisAI(question) {
+      const identityAnswer = checkAlisIdentity(question);
+
+  if (identityAnswer) {
+    answerBox.textContent = identityAnswer;
+    speak(identityAnswer);
+    return;
+  }
   const callbackName = "alisCallback";
 
   window.alisCallback = function(data) {
