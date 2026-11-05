@@ -227,7 +227,40 @@ const orb = document.getElementById("alisOrb");
     const answer = data.answer || "अभी जवाब नहीं मिला।";
     answerBox.textContent = answer;
     alisText.textContent = answer;
+    if (data.audio) {
+  window.speechSynthesis.cancel();
+
+  const folaAudio = new Audio(
+    "data:" + (data.mimeType || "audio/wav") +
+    ";base64," + data.audio
+  );
+
+  speaking = true;
+  orb.classList.add("speaking");
+
+  folaAudio.onended = () => {
+    speaking = false;
+    orb.classList.remove("speaking");
+
+    if (autoListen && !listening) {
+      setTimeout(startListening, 1000);
+    }
+  };
+
+  folaAudio.onerror = () => {
+    speaking = false;
+    orb.classList.remove("speaking");
     speak(answer);
+  };
+
+  folaAudio.play().catch(() => {
+    speaking = false;
+    orb.classList.remove("speaking");
+    speak(answer);
+  });
+} else {
+  speak(answer);
+    }
   };
 
   const script = document.createElement("script");
