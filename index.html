@@ -213,14 +213,7 @@ const orb = document.getElementById("alisOrb");
   return null;
   }
   function askAlisAI(question) {
-      const identityAnswer = checkAlisIdentity(question);
-
-  if (identityAnswer) {
-    answerBox.textContent = identityAnswer;
-    alisText.textContent = identityAnswer;
-    speak(identityAnswer);
-    return;
-  }
+      
   const callbackName = "alisCallback";
 
   window.alisCallback = function(data) {
