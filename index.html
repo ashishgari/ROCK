@@ -269,7 +269,7 @@ const orb = document.getElementById("alisOrb");
 
   script.onerror = function() {
     answerBox.textContent = "ALIS इंटरनेट से नहीं जुड़ पाया।";
-    speak("इंटरनेट से जुड़ने में समस्या हुई।");
+    alisText.textContent = "इंटरनेट से जुड़ने में समस्या हुई।";
   };
 
   document.body.appendChild(script);
@@ -321,81 +321,10 @@ if ("speechSynthesis" in window) {
   setTimeout(loadVoices, 500);
   setTimeout(loadVoices, 1500);
 }
-
-function speak(message) {
+  function speak(message) {
   answerBox.textContent = message;
-
-  if (!("speechSynthesis" in window)) {
-    statusBox.textContent = "इस ब्राउज़र में आवाज़ का समर्थन उपलब्ध नहीं है।";
-    return;
-  }
-
-  window.speechSynthesis.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(message);
-  console.log("ALIS TEXT:", message);
-  const selectedVoice = availableVoices[Number(voiceSelect.value)];
-
-  if (selectedVoice) {
-    utterance.voice = selectedVoice;
-    utterance.lang = selectedVoice.lang;
-  } else {
-    utterance.lang = "hi-IN";
-  }
-
-  utterance.rate = 0.9;
-  utterance.pitch = 1;
-
-  utterance.onstart = () => {
-    speaking = true;
-    orb.classList.add("speaking");
-  };
-
-  
-utterance.onend = () => {
-  speaking = false;
-  orb.classList.remove("speaking");
-
-  if (autoListen && !listening) {
-    setTimeout(() => {
-      if (autoListen && !speaking && !listening) {
-        startListening();
-      }
-    }, 1000);
-  }
-};
-  
-
-  
-utterance.onerror = () => {
-  speaking = false;
-  orb.classList.remove("speaking");
-  statusBox.textContent = "आवाज़ चलाने में समस्या हुई।";
-
-  if (autoListen && !listening) {
-    setTimeout(() => {
-      if (autoListen && !speaking && !listening) {
-        startListening();
-      }
-    }, 1000);
-  }
-};
-  
-speaking = true;
-  window.speechSynthesis.speak(utterance);
+  askAlisAI(message);
 }
-
-previewVoiceBtn.addEventListener("click", () => {
-  loadVoices();
-
-  if (!availableVoices.length) {
-    statusBox.textContent =
-      "आवाज़ उपलब्ध नहीं है। Chrome की आवाज़ सेटिंग जाँचें।";
-    return;
-  }
-
-  speak("नमस्ते! मैं ALIS हूँ।");
-});
 
 function getDayName() {
   return [
