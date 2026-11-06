@@ -250,17 +250,16 @@ const orb = document.getElementById("alisOrb");
   folaAudio.onerror = () => {
     speaking = false;
     orb.classList.remove("speaking");
-    speak(answer);
-  };
+     };
 
   folaAudio.play().catch(() => {
     speaking = false;
     orb.classList.remove("speaking");
-    speak(answer);
   });
 } else {
-  speak(answer);
-    }
+  answerBox.textContent = answer;
+  alisText.textContent = answer;
+}
   };
 
   const script = document.createElement("script");
