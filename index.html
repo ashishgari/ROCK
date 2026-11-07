@@ -213,8 +213,8 @@ const orb = document.getElementById("alisOrb");
   return null;
   }
   function askAlisAI(question) {
-      
   const callbackName = "alisCallback";
+
   window.alisCallback = function(data) {
     const answer = data.answer || "अभी जवाब नहीं मिला।";
     answerBox.textContent = answer;
@@ -249,7 +249,8 @@ const orb = document.getElementById("alisOrb");
         setTimeout(startListening, 1000);
       }
     };
-        folaAudio.onerror = () => {
+
+    folaAudio.onerror = () => {
       speaking = false;
       orb.classList.remove("speaking");
     };
@@ -258,18 +259,6 @@ const orb = document.getElementById("alisOrb");
       speaking = false;
       orb.classList.remove("speaking");
     });
-  };
-
-    const answer = data.answer || "अभी जवाब नहीं मिला।";
-    answerBox.textContent = answer;
-    alisText.textContent = answer;
-        const audioScript = document.createElement("script");
-    audioScript.src = ALIS_API_URL +
-      "?audioText=" + encodeURIComponent(answer) +
-      "&callback=alisAudioCallback";
-
-    document.body.appendChild(audioScript);
-    
   };
 
   const script = document.createElement("script");
@@ -284,6 +273,7 @@ const orb = document.getElementById("alisOrb");
 
   document.body.appendChild(script);
   }
+   
 
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
