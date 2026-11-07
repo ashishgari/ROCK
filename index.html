@@ -215,44 +215,61 @@ const orb = document.getElementById("alisOrb");
   function askAlisAI(question) {
       
   const callbackName = "alisCallback";
-
   window.alisCallback = function(data) {
     const answer = data.answer || "अभी जवाब नहीं मिला।";
     answerBox.textContent = answer;
     alisText.textContent = answer;
-    if (data.audio) {
-  window.speechSynthesis.cancel();
 
-  const folaAudio = new Audio(
-    "data:" + (data.mimeType || "audio/wav") +
-    ";base64," + data.audio
-  );
+    const audioScript = document.createElement("script");
+    audioScript.src = ALIS_API_URL +
+      "?audioText=" + encodeURIComponent(answer) +
+      "&callback=alisAudioCallback";
 
-  speaking = true;
-  orb.classList.add("speaking");
-
-  folaAudio.onended = () => {
-    speaking = false;
-    orb.classList.remove("speaking");
-
-    if (autoListen && !listening) {
-      setTimeout(startListening, 1000);
-    }
+    document.body.appendChild(audioScript);
   };
 
-  folaAudio.onerror = () => {
-    speaking = false;
-    orb.classList.remove("speaking");
-     };
+  window.alisAudioCallback = function(data) {
+    if (!data.audio) return;
 
-  folaAudio.play().catch(() => {
-    speaking = false;
-    orb.classList.remove("speaking");
-  });
-} else {
-  answerBox.textContent = answer;
-  alisText.textContent = answer;
-}
+    window.speechSynthesis.cancel();
+
+    const folaAudio = new Audio(
+      "data:" + (data.mimeType || "audio/wav") +
+      ";base64," + data.audio
+    );
+
+    speaking = true;
+    orb.classList.add("speaking");
+
+    folaAudio.onended = () => {
+      speaking = false;
+      orb.classList.remove("speaking");
+
+      if (autoListen && !listening) {
+        setTimeout(startListening, 1000);
+      }
+    };
+        folaAudio.onerror = () => {
+      speaking = false;
+      orb.classList.remove("speaking");
+    };
+
+    folaAudio.play().catch(() => {
+      speaking = false;
+      orb.classList.remove("speaking");
+    });
+  };
+
+    const answer = data.answer || "अभी जवाब नहीं मिला।";
+    answerBox.textContent = answer;
+    alisText.textContent = answer;
+        const audioScript = document.createElement("script");
+    audioScript.src = ALIS_API_URL +
+      "?audioText=" + encodeURIComponent(answer) +
+      "&callback=alisAudioCallback";
+
+    document.body.appendChild(audioScript);
+    
   };
 
   const script = document.createElement("script");
