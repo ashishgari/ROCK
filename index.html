@@ -613,7 +613,7 @@ function startListening() {
   try {
     recognition = new SpeechRecognition();
     recognition.lang = "hi-IN";
-    recognition.continuous = false;
+    recognition.continuous = true;
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
@@ -642,7 +642,7 @@ recognition.onend = () => {
   listenBtn.textContent = "🎙️ बोलिए — ALIS सुन रहा है";
 
   if (autoListen && !speaking && !alisProcessing) {
-  scheduleListening(800);
+  scheduleListening(2000);
   }
 };
     
