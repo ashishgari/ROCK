@@ -1,0 +1,11 @@
+{
+  "name": "ALIS Voice Assistant",
+  "short_name": "ALIS",
+  "description": "आपका हिंदी AI वॉइस असिस्टेंट",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#07152f",
+  "theme_color": "#07152f"
+}
