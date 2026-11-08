@@ -213,9 +213,13 @@ const orb = document.getElementById("alisOrb");
   return null;
   }
   function askAlisAI(question) {
+    alisProcessing = true;
+if (listening) recognition.stop();
   const callbackName = "alisCallback";
 
   window.alisCallback = function(data) {
+    if (listening) recognition.stop();
+    alisProcessing = true;
     const answer = data.answer || "अभी जवाब नहीं मिला।";
     answerBox.textContent = answer;
     alisText.textContent = answer;
@@ -242,6 +246,7 @@ const orb = document.getElementById("alisOrb");
     orb.classList.add("speaking");
 
     folaAudio.onended = () => {
+      alisProcessing = false;
       speaking = false;
       orb.classList.remove("speaking");
 
@@ -252,12 +257,20 @@ const orb = document.getElementById("alisOrb");
 
     folaAudio.onerror = () => {
       speaking = false;
+      alisProcessing = false;
       orb.classList.remove("speaking");
+      if (autoListen && !listening) {
+    setTimeout(startListening, 1000);
+      }
     };
 
     folaAudio.play().catch(() => {
       speaking = false;
+      alisProcessing = false;
       orb.classList.remove("speaking");
+      if (autoListen && !listening) {
+    setTimeout(startListening, 1000);
+      }
     });
   };
 
@@ -281,6 +294,7 @@ const SpeechRecognition =
 let recognition = null;
 let listening = false;
 let speaking = false;
+  let alisProcessing = false;
 let availableVoices = [];
 let autoListen = true;
 
@@ -627,7 +641,7 @@ recognition.onend = () => {
   orb.classList.remove("listening");
   listenBtn.textContent = "🎙️ बोलिए — ALIS सुन रहा है";
 
-  if (autoListen && !speaking) {
+  if (autoListen && !speaking && !alisProcessing) {
   scheduleListening(800);
   }
 };
