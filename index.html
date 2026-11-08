@@ -642,7 +642,7 @@ recognition.onend = () => {
   listenBtn.textContent = "🎙️ बोलिए — ALIS सुन रहा है";
 
   if (autoListen && !speaking && !alisProcessing) {
-  scheduleListening(2000);
+  scheduleListening(500);
   }
 };
     
