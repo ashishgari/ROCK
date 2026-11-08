@@ -685,6 +685,12 @@ stopBtn.addEventListener("click", () => {
   listenBtn.textContent = "🎙️ बोलिए — ALIS सुन रहा है";
   statusBox.textContent = "आवाज़ बंद है।";
 });
+  if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js")
+      .catch(error => console.log("Service Worker error:", error));
+  });
+  }
 </script>
 </body>
 </html>
