@@ -7,5 +7,17 @@
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#07152f",
-  "theme_color": "#07152f"
+  "theme_color": "#07152f",
+  "icons": [
+    {
+      "src": "./icons/alis-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icons/alis-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
