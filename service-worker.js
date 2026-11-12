@@ -3,7 +3,9 @@ const CACHE_NAME = "alis-pwa-v2";
 const APP_FILES = [
   "./",
   "./index.html",
-  "./manifest.json"
+  "./manifest.json",
+  "./icons/alis-192.png",
+  "./icons/alis-512.png"
 ];
 
 self.addEventListener("install", event => {
