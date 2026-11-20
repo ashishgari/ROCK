@@ -405,7 +405,26 @@ window.alisWorldWatchCallback = function(data) {
     return event.place + " में तीव्रता " + event.magnitude;
   }).join(" और ");
 
-  speak("आशीष, नई भूकंप घटनाएँ दर्ज हुई हैं: " + details);
+  const details = newAlerts.map(function(event) {
+  const magnitude = Number(event.magnitude);
+
+  let warning = "";
+
+  if (magnitude >= 6.0) {
+    warning = "बहुत गंभीर चेतावनी! ";
+  } else if (magnitude >= 5.0) {
+    warning = "गंभीर चेतावनी! ";
+  } else if (magnitude >= 4.0) {
+    warning = "सावधान रहें। ";
+  } else {
+    warning = "सामान्य सूचना। ";
+  }
+
+  return warning + event.place +
+    " में तीव्रता " + magnitude + " का भूकंप दर्ज हुआ है।";
+}).join(" ");
+
+speak("आशीष, " + details);
 };
   checkWorldWatch();
 
