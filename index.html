@@ -368,29 +368,49 @@ function checkWorldWatch() {
 
   document.body.appendChild(script);
 }
-  window.alisWorldWatchCallback = function(data) {
-  if (!data.alerts || data.alerts.length === 0) return;
-
-  const event = data.alerts[0];
-
-  const message =
-    "आशीष, " + event.place +
-    " में तीव्रता " + event.magnitude +
-    " का नया भूकंप दर्ज हुआ है।";
-
-  speak(message);
-};
-
-checkWorldWatch();
-
-setInterval(checkWorldWatch, 5 * 60 * 1000);
+  
 function getDayName() {
   return [
     "रविवार", "सोमवार", "मंगलवार", "बुधवार",
     "गुरुवार", "शुक्रवार", "शनिवार"
   ][new Date().getDay()];
 }
+window.alisWorldWatchCallback = function(data) {
+  const alerts = Array.isArray(data.alerts) ? data.alerts : [];
 
+  if (alerts.length === 0) return;
+
+  let heardIds = JSON.parse(
+    localStorage.getItem("ALIS_HEARD_EARTHQUAKE_IDS") || "[]"
+  );
+
+  const newAlerts = alerts.filter(function(event) {
+    return !heardIds.includes(event.id);
+  });
+
+  if (newAlerts.length === 0) return;
+
+  heardIds = heardIds.concat(
+    newAlerts.map(function(event) {
+      return event.id;
+    })
+  ).slice(-100);
+
+  localStorage.setItem(
+    "ALIS_HEARD_EARTHQUAKE_IDS",
+    JSON.stringify(heardIds)
+  );
+
+  const details = newAlerts.map(function(event) {
+    return event.place + " में तीव्रता " + event.magnitude;
+  }).join(" और ");
+
+  speak("आशीष, नई भूकंप घटनाएँ दर्ज हुई हैं: " + details);
+};
+  checkWorldWatch();
+
+setInterval(checkWorldWatch, 5 * 60 * 1000);
+      
 function getDateText() {
   const now = new Date();
   const months = [
