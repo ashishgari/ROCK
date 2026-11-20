@@ -215,7 +215,7 @@ const orb = document.getElementById("alisOrb");
 
   return null;
   }
-  function askAlisAI(question) {
+  function askAlisAI(question, audioOnly) {
     alisProcessing = true;
 if (listening) recognition.stop();
   const callbackName = "alisCallback";
@@ -276,7 +276,14 @@ if (listening) recognition.stop();
       }
     });
   };
-
+if (audioOnly) {
+  const audioScript = document.createElement("script");
+  audioScript.src = ALIS_API_URL +
+    "?audioText=" + encodeURIComponent(question) +
+    "&callback=alisAudioCallback";
+  document.body.appendChild(audioScript);
+  return;
+  }
   const script = document.createElement("script");
   script.src = ALIS_API_URL +
     "?question=" + encodeURIComponent(question) +
@@ -341,6 +348,7 @@ if ("speechSynthesis" in window) {
   function speak(message) {
   answerBox.textContent = message;
   alisText.textContent = message;
+  askAlisAI(message, true);
   }
 
 function getDayName() {
