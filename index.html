@@ -354,7 +354,20 @@ if ("speechSynthesis" in window) {
   alisText.textContent = message;
   askAlisAI(message, true);
   }
+let lastEarthquakeCheck = 0;
+let knownEarthquakeIds = [];
 
+function checkWorldWatch() {
+  if (Date.now() - lastEarthquakeCheck < 300000) return;
+
+  lastEarthquakeCheck = Date.now();
+
+  const script = document.createElement("script");
+  script.src = ALIS_API_URL +
+    "?worldWatch=1&callback=alisWorldWatchCallback";
+
+  document.body.appendChild(script);
+}
 function getDayName() {
   return [
     "रविवार", "सोमवार", "मंगलवार", "बुधवार",
