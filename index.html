@@ -236,7 +236,11 @@ if (listening) recognition.stop();
   };
 
   window.alisAudioCallback = function(data) {
-    if (!data.audio) return;
+    if (!data.audio) {
+  alisText.textContent = "Fola ऑडियो नहीं मिला: " + (data.error || "खाली ऑडियो");
+  alisProcessing = false;
+  return;
+    }
 
     window.speechSynthesis.cancel();
 
