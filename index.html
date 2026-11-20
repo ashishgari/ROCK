@@ -401,9 +401,6 @@ window.alisWorldWatchCallback = function(data) {
     JSON.stringify(heardIds)
   );
 
-  const details = newAlerts.map(function(event) {
-    return event.place + " में तीव्रता " + event.magnitude;
-  }).join(" और ");
 
   const details = newAlerts.map(function(event) {
   const magnitude = Number(event.magnitude);
