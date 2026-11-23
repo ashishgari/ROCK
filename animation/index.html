@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ALIS 2D Animation Studio</title>
+<style>
+body{margin:0;background:#101a35;color:white;text-align:center;font-family:Arial}
+h2{color:#65c7ff}
+canvas{background:#d9efff;width:95%;max-width:600px;border-radius:12px}
+</style>
+</head>
+<body>
+<h2>ALIS 2D Animation Studio</h2>
+<p>हमारा पहला एनिमेशन</p>
+<canvas id="scene" width="600" height="350"></canvas>
+<script>
+const c=document.getElementById("scene");
+const ctx=c.getContext("2d");
+let x=50,step=0;
+function animate(){
+ctx.clearRect(0,0,600,350);
+ctx.fillStyle="#87ceeb";
+ctx.fillRect(0,0,600,350);
+ctx.fillStyle="#55aa55";
+ctx.fillRect(0,280,600,70);
+ctx.fillStyle="#ffcc33";
+ctx.beginPath();ctx.arc(500,65,35,0,Math.PI*2);ctx.fill();
+ctx.fillStyle="#ffcc99";
+ctx.beginPath();ctx.arc(x,190,25,0,Math.PI*2);ctx.fill();
+ctx.fillStyle="#2255aa";
+ctx.fillRect(x-17,215,34,55);
+ctx.strokeStyle="#222";ctx.lineWidth=6;
+ctx.beginPath();
+ctx.moveTo(x,230);ctx.lineTo(x-20,255);
+ctx.moveTo(x,230);ctx.lineTo(x+20,255);
+ctx.moveTo(x-5,270);ctx.lineTo(x-15+Math.sin(step)*10,305);
+ctx.moveTo(x+5,270);ctx.lineTo(x+15-Math.sin(step)*10,305);
+ctx.stroke();
+x+=1.5;if(x>600)x=0;
+step+=0.15;
+requestAnimationFrame(animate);
+}
+animate();
+</script>
+</body>
+</html>
