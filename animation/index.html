@@ -45,7 +45,7 @@ ctx.fillRect(x-17,215,34,55);
 ctx.strokeStyle="#222";ctx.lineWidth=6;
 ctx.beginPath();
   let swing = Math.sin(step) * 18;
-  let legSwing = Math.sin(step) * 10;
+  let legSwing = Math.sin(step) * 18;
 ctx.moveTo(x,230);
 ctx.lineTo(x-20-swing,255);
 
@@ -56,12 +56,16 @@ let kneeSwing = Math.sin(step) * 22;
 let oppositeKnee = -kneeSwing;
   ctx.lineTo(x+15+oppositeKnee,290);
 ctx.lineTo(x-15-legSwing,305);
-let kneeSwing = Math.sin(step) * 18;
-let legSwing = Math.sin(step) * 18;
+
+let kneeSwing = Math.sin(step) * 22;
 
 ctx.moveTo(x-5,270);
 ctx.lineTo(x-15+kneeSwing,290);
 ctx.lineTo(x-15+legSwing,305);
+
+ctx.moveTo(x+5,270);
+ctx.lineTo(x+15-kneeSwing,290);
+ctx.lineTo(x+15-legSwing,305);
 
 ctx.moveTo(x+5,270);
 ctx.lineTo(x+15-kneeSwing,290);
