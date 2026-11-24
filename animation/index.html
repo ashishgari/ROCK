@@ -52,15 +52,16 @@ ctx.lineTo(x-20-swing,255);
 ctx.moveTo(x,230);
 ctx.lineTo(x+20-swing,255);
 let walk = Math.sin(step);
+  let forwardStep = Math.cos(step) * 12;
 let leftLift = Math.max(0, walk) * 18;
 let rightLift = Math.max(0, -walk) * 18;
 
 ctx.moveTo(x-5,270);
-ctx.lineTo(x-12+walk*5,290-leftLift*0.5);
+ctx.lineTo(x-12+walk*5-forwardStep,290-leftLift*0.5);
 ctx.lineTo(x-15+walk*9,305-leftLift);
 
 ctx.moveTo(x+5,270);
-ctx.lineTo(x+12-walk*5,290-rightLift*0.5);
+ctx.lineTo(x+12-walk*5+forwardStep,290-rightLift*0.5);
 ctx.lineTo(x+15-walk*9,305-rightLift);
 
 ctx.stroke();
