@@ -28,6 +28,18 @@ ctx.fillStyle="#ffcc33";
 ctx.beginPath();ctx.arc(500,65,35,0,Math.PI*2);ctx.fill();
 ctx.fillStyle="#ffcc99";
 ctx.beginPath();ctx.arc(x,190,25,0,Math.PI*2);ctx.fill();
+  // ALIS character face
+ctx.fillStyle="#222";
+ctx.beginPath();
+ctx.arc(x-8,185,3,0,Math.PI*2);
+ctx.arc(x+8,185,3,0,Math.PI*2);
+ctx.fill();
+
+ctx.strokeStyle="#222";
+ctx.lineWidth=2;
+ctx.beginPath();
+ctx.arc(x,192,9,0.2,Math.PI-0.2);
+ctx.stroke();
 ctx.fillStyle="#2255aa";
 ctx.fillRect(x-17,215,34,55);
 ctx.strokeStyle="#222";ctx.lineWidth=6;
