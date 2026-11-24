@@ -45,16 +45,17 @@ ctx.fillRect(x-17,215,34,55);
 ctx.strokeStyle="#222";ctx.lineWidth=6;
 ctx.beginPath();
   let swing = Math.sin(step) * 18;
+  let legSwing = Math.sin(step) * 10;
 ctx.moveTo(x,230);
-ctx.lineTo(x-20-swing,255);
+ctx.lineTo(x-15-Swing,255);
 
 ctx.moveTo(x,230);
-ctx.lineTo(x+20+swing,255);
+ctx.lineTo(x+20+Swing,255);
 ctx.moveTo(x-5,270);
-ctx.lineTo(x-15-swing,305);
+ctx.lineTo(x-15+legSwing,305);
 
 ctx.moveTo(x+5,270);
-ctx.lineTo(x+15+swing,305);
+ctx.lineTo(x+15-legSwing,305);
 ctx.stroke();
 x+=1.5;if(x>600)x=0;
 step+=0.15;
