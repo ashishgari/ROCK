@@ -56,10 +56,17 @@ let kneeSwing = Math.sin(step) * 22;
 let oppositeKnee = -kneeSwing;
   ctx.lineTo(x+15+oppositeKnee,290);
 ctx.lineTo(x-15-legSwing,305);
+let kneeSwing = Math.sin(step) * 18;
+let legSwing = Math.sin(step) * 18;
+
+ctx.moveTo(x-5,270);
+ctx.lineTo(x-15+kneeSwing,290);
+ctx.lineTo(x-15+legSwing,305);
 
 ctx.moveTo(x+5,270);
-ctx.lineTo(x+15+kneeSwing,290);
-ctx.lineTo(x+15+legSwing,305);
+ctx.lineTo(x+15-kneeSwing,290);
+ctx.lineTo(x+15-legSwing,305);
+
 ctx.stroke();
 x+=1.5;if(x>600)x=0;
 step+=0.15;
