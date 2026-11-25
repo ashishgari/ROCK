@@ -91,14 +91,15 @@ ctx.lineTo(headX,220+bounce);
 ctx.stroke();
 
 // हाथों का डांस
+    let armShake=Math.sin(step*18)*5;
 ctx.beginPath();
 ctx.lineWidth=5;
 
 ctx.moveTo(headX,160);
-ctx.lineTo(headX-35,175+dance*30);
+ctx.lineTo(headX-35+armShake,175+dance*30);
 
 ctx.moveTo(headX,160);
-ctx.lineTo(headX+35,175-dance*30);
+ctx.lineTo(headX+35-armShake,175-dance*30);
 
 ctx.stroke();
 
