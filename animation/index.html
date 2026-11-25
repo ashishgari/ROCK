@@ -55,10 +55,18 @@ ctx.beginPath();
 ctx.arc(headX-8,headY-5,3,0,Math.PI*2);
 ctx.arc(headX+8,headY-5,3,0,Math.PI*2);
 ctx.fill();
-    // हैरानी में खुला मुँह
+    // हँसने और हैरान होने वाला मुँह
+let laugh=Math.sin(step*3)>0;
+
 ctx.fillStyle="#111";
 ctx.beginPath();
+
+if(laugh){
+ctx.ellipse(headX,headY+10,10,5,0,0,Math.PI*2);
+}else{
 ctx.ellipse(headX,headY+9,6,9,0,0,Math.PI*2);
+}
+
 ctx.fill();
 
 // शरीर
