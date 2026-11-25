@@ -49,6 +49,18 @@ ctx.beginPath();
 ctx.arc(headX-8,headY-5,6,0,Math.PI*2);
 ctx.arc(headX+8,headY-5,6,0,Math.PI*2);
 ctx.fill();
+    // गुस्से वाली भौंहें
+ctx.strokeStyle="#111";
+ctx.lineWidth=3;
+ctx.beginPath();
+
+ctx.moveTo(headX-15,headY-14);
+ctx.lineTo(headX-3,headY-9);
+
+ctx.moveTo(headX+15,headY-14);
+ctx.lineTo(headX+3,headY-9);
+
+ctx.stroke();
 
 ctx.fillStyle="#111";
 ctx.beginPath();
