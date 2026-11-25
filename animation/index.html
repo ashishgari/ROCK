@@ -54,15 +54,15 @@ ctx.arc(headX-8,headY+bounce-5,reaction===1?8:6,0,Math.PI*2);
 ctx.arc(headX+8,headY+bounce-5,reaction===1?8:6,0,Math.PI*2);
 ctx.fill();
 
-// गुस्से वाली भौंहें
+// गुस्से और डर वाली भौंहें
 ctx.strokeStyle="#111";
 ctx.lineWidth=3;
 ctx.beginPath();
 
-ctx.moveTo(headX-15,headY+bounce-14);
+ctx.moveTo(headX-15,headY+bounce-(scared?20:14));
 ctx.lineTo(headX-3,headY+bounce-9);
 
-ctx.moveTo(headX+15,headY+bounce-14);
+ctx.moveTo(headX+15,headY+bounce-(scared?20:14));
 ctx.lineTo(headX+3,headY+bounce-9);
 
 ctx.stroke();
