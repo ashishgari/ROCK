@@ -49,10 +49,11 @@ ctx.stroke();
     let mouthSize=6+Math.abs(Math.sin(step*2))*3;
 let laugh=reaction===0;
     let scared=reaction===2;
+    let blink=(step%35>33)?0.15:1;
 // हैरानी वाली बड़ी आँखें
 ctx.fillStyle="#fff";
 ctx.beginPath();
-ctx.arc(headX-8,headY+bounce-5,scared?10:(reaction===1?8:6),0,Math.PI*2);
+ctx.arc(headX-8,headY+bounce-5,scared?10:(reaction===1?8:6))*blink,0,Math.PI*2);
 ctx.arc(headX+8,headY+bounce-5,scared?10:(reaction===1?8:6),0,Math.PI*2);
 ctx.fill();
 
@@ -72,10 +73,12 @@ ctx.stroke();
 
 // आँखों की पुतलियाँ
 ctx.fillStyle="#111";
+ctx.globalAlpha=blink;
 ctx.beginPath();
 ctx.arc(headX-8+eyeMove,headY+bounce-5,3,0,Math.PI*2);
 ctx.arc(headX+8+eyeMove,headY+bounce-5,3,0,Math.PI*2);
 ctx.fill();
+    ctx.globalAlpha=1;
 
 // हँसने और हैरान होने वाला मुँह
 
