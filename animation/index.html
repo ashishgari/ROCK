@@ -73,26 +73,23 @@ ctx.lineTo(headX+35,175-dance*30);
 
 ctx.stroke();
 
-// घुटने मोड़कर डांस
+// आगे-पीछे पैर चलाने वाला डांस
 ctx.beginPath();
 ctx.lineWidth=6;
 
-let leftLift=Math.max(0,dance)*22;
-let rightLift=Math.max(0,-dance)*22;
+let swingLeg=Math.sin(step*3)*18;
+let liftLeft=Math.max(0,dance)*18;
+let liftRight=Math.max(0,-dance)*18;
 
-let leftKneeX=headX-18-dance*12;
-let rightKneeX=headX+18-dance*12;
-
-let leftKneeY=245+bounce-leftLift;
-let rightKneeY=245+bounce-rightLift;
-
+// बायाँ पैर
 ctx.moveTo(headX-5,220+bounce);
-ctx.lineTo(leftKneeX,leftKneeY);
-ctx.lineTo(leftKneeX-12,270-leftLift);
+ctx.lineTo(headX-18+swingLeg,245+bounce-liftLeft);
+ctx.lineTo(headX-18+swingLeg*2,270-liftLeft);
 
+// दायाँ पैर
 ctx.moveTo(headX+5,220+bounce);
-ctx.lineTo(rightKneeX,rightKneeY);
-ctx.lineTo(rightKneeX+12,270-rightLift);
+ctx.lineTo(headX+18-swingLeg,245+bounce-liftRight);
+ctx.lineTo(headX+18-swingLeg*2,270-liftRight);
 
 ctx.stroke();
 
