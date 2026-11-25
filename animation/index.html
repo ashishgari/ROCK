@@ -45,11 +45,13 @@ ctx.lineWidth=5;
 ctx.beginPath();
 ctx.arc(headX,headY+bounce,25,0,Math.PI*2);
 ctx.stroke();
+    let reaction=Math.floor(step/20)%3;
+let laugh=reaction===0;
 // हैरानी वाली बड़ी आँखें
 ctx.fillStyle="#fff";
 ctx.beginPath();
-ctx.arc(headX-8,headY+bounce-5,6,0,Math.PI*2);
-ctx.arc(headX+8,headY+bounce-5,6,0,Math.PI*2);
+ctx.arc(headX-8,headY+bounce-5,reaction===1?8:6,0,Math.PI*2);
+ctx.arc(headX+8,headY+bounce-5,reaction===1?8:6,0,Math.PI*2);
 ctx.fill();
 
 // गुस्से वाली भौंहें
@@ -73,7 +75,6 @@ ctx.arc(headX+8,headY+bounce-5,3,0,Math.PI*2);
 ctx.fill();
 
 // हँसने और हैरान होने वाला मुँह
-let laugh=Math.sin(step*3)>0;
 
 ctx.fillStyle="#111";
 ctx.beginPath();
