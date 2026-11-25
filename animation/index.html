@@ -18,58 +18,68 @@ canvas{background:#d9efff;width:95%;max-width:600px;border-radius:12px}
 const c=document.getElementById("scene");
 const ctx=c.getContext("2d");
 let x=50,step=0;
-function animate(){
+  function animate(){
 ctx.clearRect(0,0,600,350);
+
+// आसमान
 ctx.fillStyle="#87ceeb";
 ctx.fillRect(0,0,600,350);
+
+// जमीन
 ctx.fillStyle="#55aa55";
 ctx.fillRect(0,280,600,70);
-ctx.fillStyle="#ffcc33";
-ctx.beginPath();ctx.arc(500,65,35,0,Math.PI*2);ctx.fill();
-ctx.fillStyle="#ffcc99";
-ctx.beginPath();ctx.arc(x,190,25,0,Math.PI*2);ctx.fill();
-  // ALIS character face
-ctx.fillStyle="#222";
+
+// Stickman की स्थिति
+let headX=200;
+let headY=120;
+let move=Math.sin(step)*12;
+
+// सिर
+ctx.strokeStyle="#111";
+ctx.lineWidth=5;
 ctx.beginPath();
-ctx.arc(x-8,185,3,0,Math.PI*2);
-ctx.arc(x+8,185,3,0,Math.PI*2);
+ctx.arc(headX,headY,25,0,Math.PI*2);
+ctx.stroke();
+
+// आँखें
+ctx.fillStyle="#111";
+ctx.beginPath();
+ctx.arc(headX-8,headY-5,3,0,Math.PI*2);
+ctx.arc(headX+8,headY-5,3,0,Math.PI*2);
 ctx.fill();
 
-ctx.strokeStyle="#222";
-ctx.lineWidth=2;
+// मुस्कान
 ctx.beginPath();
-ctx.arc(x,192,9,0.2,Math.PI-0.2);
+ctx.arc(headX,headY+5,10,0.2,Math.PI-0.2);
 ctx.stroke();
-ctx.fillStyle="#2255aa";
-ctx.fillRect(x-17,215,34,55);
-ctx.strokeStyle="#222";ctx.lineWidth=6;
+
+// शरीर
 ctx.beginPath();
-  let swing = Math.sin(step) * 18;
-  let legSwing = Math.sin(step) * 18;
-ctx.moveTo(x,230);
-ctx.lineTo(x-20-swing,255);
-
-ctx.moveTo(x,230);
-ctx.lineTo(x+20-swing,255);
-let walk = Math.sin(step);
-  let forwardStep = Math.cos(step) * 12;
-let leftLift = Math.max(0, walk) * 18;
-let rightLift = Math.max(0, -walk) * 18;
-
-ctx.moveTo(x-5,270);
-ctx.lineTo(x-12+walk*5,290-leftLift*0.5);
-ctx.lineTo(x-15+walk*9,305-leftLift);
-
-ctx.moveTo(x+5,270);
-ctx.lineTo(x+12-walk*5,290-rightLift*0.5);
-ctx.lineTo(x+15-walk*9,305-rightLift);
-
+ctx.moveTo(headX,145);
+ctx.lineTo(headX,220);
 ctx.stroke();
-x+=1.5;if(x>600)x=0;
-step+=0.15;
+
+// हाथ
+ctx.beginPath();
+ctx.moveTo(headX,160);
+ctx.lineTo(headX-30-move,195);
+ctx.moveTo(headX,160);
+ctx.lineTo(headX+30+move,195);
+ctx.stroke();
+
+// पैर
+ctx.beginPath();
+ctx.moveTo(headX,220);
+ctx.lineTo(headX-20-move,270);
+ctx.moveTo(headX,220);
+ctx.lineTo(headX+20+move,270);
+ctx.stroke();
+
+step+=0.12;
 requestAnimationFrame(animate);
 }
 animate();
+
 </script>
 </body>
 </html>
