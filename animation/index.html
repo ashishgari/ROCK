@@ -32,13 +32,15 @@ ctx.fillRect(0,280,600,70);
 // Stickman की स्थिति
 let headX=200;
 let headY=120;
-let move=Math.sin(step)*12;
+    let dance=Math.sin(step*3);
+let bounce=Math.abs(Math.sin(step*3))*12;
+    
 
 // सिर
 ctx.strokeStyle="#111";
 ctx.lineWidth=5;
 ctx.beginPath();
-ctx.arc(headX,headY,25,0,Math.PI*2);
+ctx.arc(headX,headY+bounce,25,0,Math.PI*2);
 ctx.stroke();
 
 // आँखें
@@ -55,24 +57,33 @@ ctx.stroke();
 
 // शरीर
 ctx.beginPath();
-ctx.moveTo(headX,145);
-ctx.lineTo(headX,220);
+ctx.moveTo(headX,145+bounce);
+ctx.lineTo(headX,220+bounce);
 ctx.stroke();
 
-// हाथ
+// हाथों का डांस
 ctx.beginPath();
+ctx.lineWidth=5;
+
 ctx.moveTo(headX,160);
-ctx.lineTo(headX-30-move,195);
+ctx.lineTo(headX-35,175+dance*30);
+
 ctx.moveTo(headX,160);
-ctx.lineTo(headX+30+move,195);
+ctx.lineTo(headX+35,175-dance*30);
+
 ctx.stroke();
 
-// पैर
+
+// पैरों का डांस
 ctx.beginPath();
 ctx.moveTo(headX,220);
-ctx.lineTo(headX-20-move,270);
+ctx.lineTo(headX-25-dance*15,250);
+ctx.lineTo(headX-35-dance*20,270);
+
 ctx.moveTo(headX,220);
-ctx.lineTo(headX+20+move,270);
+ctx.lineTo(headX+25+dance*15,250);
+ctx.lineTo(headX+35+dance*20,270);
+
 ctx.stroke();
 
 step+=0.12;
