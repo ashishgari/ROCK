@@ -43,17 +43,23 @@ ctx.beginPath();
 ctx.arc(headX,headY+bounce,25,0,Math.PI*2);
 ctx.stroke();
 
-// आँखें
+// हैरानी वाली बड़ी आँखें
+ctx.fillStyle="#fff";
+ctx.beginPath();
+ctx.arc(headX-8,headY-5,6,0,Math.PI*2);
+ctx.arc(headX+8,headY-5,6,0,Math.PI*2);
+ctx.fill();
+
 ctx.fillStyle="#111";
 ctx.beginPath();
 ctx.arc(headX-8,headY-5,3,0,Math.PI*2);
 ctx.arc(headX+8,headY-5,3,0,Math.PI*2);
 ctx.fill();
-
-// मुस्कान
+    // हैरानी में खुला मुँह
+ctx.fillStyle="#111";
 ctx.beginPath();
-ctx.arc(headX,headY+5,10,0.2,Math.PI-0.2);
-ctx.stroke();
+ctx.ellipse(headX,headY+9,6,9,0,0,Math.PI*2);
+ctx.fill();
 
 // शरीर
 ctx.beginPath();
