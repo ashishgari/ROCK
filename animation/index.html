@@ -30,7 +30,7 @@ ctx.fillStyle="#55aa55";
 ctx.fillRect(0,280,600,70);
 
 // Stickman की स्थिति
-    let shake=Math.sin(step*18)*3;
+    let shake=Math.sin(step*3)*1;
 let headX=200;
    headX+=shake; 
 let headY=120;
@@ -45,44 +45,48 @@ ctx.lineWidth=5;
 ctx.beginPath();
 ctx.arc(headX,headY+bounce,25,0,Math.PI*2);
 ctx.stroke();
-
 // हैरानी वाली बड़ी आँखें
 ctx.fillStyle="#fff";
 ctx.beginPath();
-ctx.arc(headX-8,headY-5,6,0,Math.PI*2);
-ctx.arc(headX+8,headY-5,6,0,Math.PI*2);
+ctx.arc(headX-8,headY+bounce-5,6,0,Math.PI*2);
+ctx.arc(headX+8,headY+bounce-5,6,0,Math.PI*2);
 ctx.fill();
-    // गुस्से वाली भौंहें
+
+// गुस्से वाली भौंहें
 ctx.strokeStyle="#111";
 ctx.lineWidth=3;
 ctx.beginPath();
 
-ctx.moveTo(headX-15,headY-14);
-ctx.lineTo(headX-3,headY-9);
+ctx.moveTo(headX-15,headY+bounce-14);
+ctx.lineTo(headX-3,headY+bounce-9);
 
-ctx.moveTo(headX+15,headY-14);
-ctx.lineTo(headX+3,headY-9);
+ctx.moveTo(headX+15,headY+bounce-14);
+ctx.lineTo(headX+3,headY+bounce-9);
 
 ctx.stroke();
 
+// आँखों की पुतलियाँ
 ctx.fillStyle="#111";
 ctx.beginPath();
-ctx.arc(headX-8,headY-5,3,0,Math.PI*2);
-ctx.arc(headX+8,headY-5,3,0,Math.PI*2);
+ctx.arc(headX-8,headY+bounce-5,3,0,Math.PI*2);
+ctx.arc(headX+8,headY+bounce-5,3,0,Math.PI*2);
 ctx.fill();
-    // हँसने और हैरान होने वाला मुँह
+
+// हँसने और हैरान होने वाला मुँह
 let laugh=Math.sin(step*3)>0;
 
 ctx.fillStyle="#111";
 ctx.beginPath();
 
 if(laugh){
-ctx.ellipse(headX,headY+10,10,5,0,0,Math.PI*2);
+ctx.ellipse(headX,headY+bounce+10,10,5,0,0,Math.PI*2);
 }else{
-ctx.ellipse(headX,headY+9,6,9,0,0,Math.PI*2);
+ctx.ellipse(headX,headY+bounce+9,6,9,0,0,Math.PI*2);
 }
 
 ctx.fill();
+
+
 
 // शरीर
 ctx.beginPath();
@@ -91,7 +95,7 @@ ctx.lineTo(headX,220+bounce);
 ctx.stroke();
 
 // हाथों का डांस
-    let armShake=Math.sin(step*18)*5;
+    let armShake=Math.sin(step*3)*1;
 ctx.beginPath();
 ctx.lineWidth=5;
 
