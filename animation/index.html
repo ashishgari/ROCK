@@ -68,12 +68,13 @@ ctx.moveTo(headX+15,headY+bounce-(scared?20:14));
 ctx.lineTo(headX+3,headY+bounce-9);
 
 ctx.stroke();
+    let eyeMove=Math.sin(step*2)*2;
 
 // आँखों की पुतलियाँ
 ctx.fillStyle="#111";
 ctx.beginPath();
-ctx.arc(headX-8,headY+bounce-5,3,0,Math.PI*2);
-ctx.arc(headX+8,headY+bounce-5,3,0,Math.PI*2);
+ctx.arc(headX-8+eyeMove,headY+bounce-5,3,0,Math.PI*2);
+ctx.arc(headX+8+eyeMove,headY+bounce-5,3,0,Math.PI*2);
 ctx.fill();
 
 // हँसने और हैरान होने वाला मुँह
