@@ -105,12 +105,13 @@ ctx.fill();
 // शरीर
 ctx.beginPath();
 ctx.moveTo(headX,145+bounce);
-ctx.lineTo(headX+(step%100>40&&step%100<55?Math.sin((step%100-40)/15*Math.PI)*18:0),220+bounce);
+ctx.lineTo(headX,220+bounce);
 ctx.stroke();
 
 // हाथों का डांस
     let armShake=Math.sin(step*3)*1;
-let armSlip=(step%100>40&&step%100<55)?Math.sin((step%100-40)/15*Math.PI):0;
+    let armSlip=(step%100>40&&step%100<55)?Math.sin((step%100-40)/15*Math.PI):0;
+
 
 ctx.beginPath();
 ctx.lineWidth=5;
