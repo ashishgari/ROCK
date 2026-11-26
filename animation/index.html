@@ -32,7 +32,9 @@ ctx.fillRect(0,280,600,70);
 // Stickman की स्थिति
     let shake=Math.sin(step*3)*0.2;
 let headX=200;
+    let slipMove=(step%100>40&&step%100<55)?Math.sin((step%100-40)/15*Math.PI)*25:0;
    headX+=shake; 
+    headX+=slipMove;
 let headY=120;
     let dance=Math.sin(step*3);
 let bounce=Math.abs(Math.sin(step*3))*3;
