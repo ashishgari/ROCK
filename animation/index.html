@@ -37,7 +37,7 @@ let headY=120;
     let dance=Math.sin(step*3);
 let bounce=Math.abs(Math.sin(step*3))*3;
     let reaction=Math.floor(step/20)%3;
-let jump=(reaction===2)?Math.abs(Math.sin(step*5))*18:0;
+let jump=(reaction===2)?Math.abs(Math.sin(step*0.5))*4:0;
     
     
 
@@ -64,17 +64,17 @@ ctx.lineWidth=3;
 ctx.beginPath();
 
 ctx.moveTo(headX-15,headY+bounce-jump-(scared?20:14));
-ctx.lineTo(headX-3,headY+bounce-9);
+ctx.lineTo(headX-3,headY+bounce-jump-9);
 
 ctx.moveTo(headX+15,headY+bounce-jump-(scared?20:14));
-ctx.lineTo(headX+3,headY+bounce-9);
+ctx.lineTo(headX+3,headY+bounce-jump-9);
 
 ctx.stroke();
     let eyeMove=Math.sin(step*2)*2;
     if(scared){
 ctx.fillStyle="#00aaff";
 ctx.beginPath();
-ctx.arc(headX+29,headY+bounce-12+Math.sin(step*8)*4,4,0,Math.PI*2);
+ctx.arc(headX+29,headY+bounce-jump-12+Math.sin(step*8)*4,4,0,Math.PI*2);
 ctx.fill();
     }
 
@@ -82,8 +82,8 @@ ctx.fill();
 ctx.fillStyle="#111";
 ctx.globalAlpha=blink;
 ctx.beginPath();
-ctx.arc(headX-8+eyeMove,headY+bounce-5,3,0,Math.PI*2);
-ctx.arc(headX+8+eyeMove,headY+bounce-5,3,0,Math.PI*2);
+ctx.arc(headX-8+eyeMove,headY+bounce-jump-5,3,0,Math.PI*2);
+ctx.arc(headX+8+eyeMove,headY+bounce-jump-5,3,0,Math.PI*2);
 ctx.fill();
     ctx.globalAlpha=1;
 
@@ -93,9 +93,9 @@ ctx.fillStyle="#111";
 ctx.beginPath();
 
 if(laugh){
-ctx.ellipse(headX,headY+bounce+9,10,5,0,0,Math.PI*2);
+ctx.ellipse(headX,headY+bounce-jump+9,10,5,0,0,Math.PI*2);
 }else{
-ctx.ellipse(headX,headY+bounce+10,mouthSize,mouthSize+2,0,0,Math.PI*2);
+ctx.ellipse(headX,headY+bounce-jump+10,mouthSize,mouthSize+2,0,0,Math.PI*2);
 }
 
 ctx.fill();
