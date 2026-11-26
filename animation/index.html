@@ -116,10 +116,10 @@ ctx.beginPath();
 ctx.lineWidth=5;
 
 ctx.moveTo(headX,160);
-ctx.lineTo(headX-35+armShake,175+dance*30);
+ctx.lineTo(headX-35+armShake-armSlip*20,175+dance*30-armSlip*20);
 
 ctx.moveTo(headX,160);
-ctx.lineTo(headX+35-armShake,175-dance*30);
+ctx.lineTo(headX+35-armShake+armSlip*20,175-dance*30-armSlip*20);
 
 ctx.stroke();
 
