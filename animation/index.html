@@ -105,11 +105,13 @@ ctx.fill();
 // शरीर
 ctx.beginPath();
 ctx.moveTo(headX,145+bounce);
-ctx.lineTo(headX,220+bounce);
+ctx.lineTo(headX+(step%100>40&&step%100<55?Math.sin((step%100-40)/15*Math.PI)*18:0),220+bounce);
 ctx.stroke();
 
 // हाथों का डांस
     let armShake=Math.sin(step*3)*1;
+let armSlip=(step%100>40&&step%100<55)?Math.sin((step%100-40)/15*Math.PI):0;
+
 ctx.beginPath();
 ctx.lineWidth=5;
 
@@ -128,16 +130,18 @@ ctx.lineWidth=6;
 let swingLeg=Math.sin(step*3)*12;
 let liftLeft=Math.max(0,dance)*18;
 let liftRight=Math.max(0,-dance)*18;
+    let slipPhase=step%100;
+let slip=(slipPhase>40&&slipPhase<55)?Math.sin((slipPhase-40)/15*Math.PI):0;
 
 // बायाँ पैर
 ctx.moveTo(headX-5,220+bounce);
 ctx.lineTo(headX-20,245+bounce-liftLeft);
-ctx.lineTo(headX-20+swingLeg,270-liftLeft);
+ctx.lineTo(headX-20+swingLeg-slip*25,270-liftLeft);
 
 // दायाँ पैर
 ctx.moveTo(headX+5,220+bounce);
 ctx.lineTo(headX+20,245+bounce-liftRight);
-ctx.lineTo(headX+20-swingLeg,270-liftRight);
+ctx.lineTo(headX+20-swingLeg+slip*25,270-liftRight);
 
 ctx.stroke();
 
