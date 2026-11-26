@@ -78,7 +78,8 @@ ctx.moveTo(headX+15,headY+bounce-jump+(reaction===2?5:0)-(scared?20:14));
 ctx.lineTo(headX+3,headY+bounce-jump+(reaction===2?5:0)-9);
 
 ctx.stroke();
-    let eyeMove=(reaction===2)?0:Math.sin(step*2)*2;
+    let eyeMove=(reaction===2?0:Math.sin(step*2)*2)+(fall>0.9?Math.sin(step*5)*4:0);
+    
     if(scared){
 ctx.fillStyle="#00aaff";
 ctx.beginPath();
