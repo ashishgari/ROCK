@@ -73,7 +73,7 @@ ctx.stroke();
     if(scared){
 ctx.fillStyle="#00aaff";
 ctx.beginPath();
-ctx.arc(headX+29,headY+bounce-12,4,0,Math.PI*2);
+ctx.arc(headX+29,headY+bounce-12+Math.sin(step*8)*4,4,0,Math.PI*2);
 ctx.fill();
     }
 
