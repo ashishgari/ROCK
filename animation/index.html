@@ -36,6 +36,8 @@ let headX=200;
 let headY=120;
     let dance=Math.sin(step*3);
 let bounce=Math.abs(Math.sin(step*3))*12;
+    let reaction=Math.floor(step/20)%3;
+let jump=(reaction===2)?Math.abs(Math.sin(step*5))*18:0;
     
     
 
@@ -43,7 +45,7 @@ let bounce=Math.abs(Math.sin(step*3))*12;
 ctx.strokeStyle="#111";
 ctx.lineWidth=5;
 ctx.beginPath();
-ctx.arc(headX,headY+bounce,25,0,Math.PI*2);
+ctx.arc(headX,headY+bounce-jump,25,0,Math.PI*2);
 ctx.stroke();
     let reaction=Math.floor(step/20)%3;
     let mouthSize=6+Math.abs(Math.sin(step*2))*3;
@@ -53,8 +55,8 @@ let laugh=reaction===0;
 // हैरानी वाली बड़ी आँखें
 ctx.fillStyle="#fff";
 ctx.beginPath();
-ctx.arc(headX-8,headY+bounce-5,(scared?10:(reaction===1?8:6))*blink,0,Math.PI*2);
-ctx.arc(headX+8,headY+bounce-5,(scared?10:(reaction===1?8:6))*blink,0,Math.PI*2);
+ctx.arc(headX-8,headY+bounce-jump-5,(scared?10:(reaction===1?8:6))*blink,0,Math.PI*2);
+ctx.arc(headX+8,headY+bounce-jump-5,(scared?10:(reaction===1?8:6))*blink,0,Math.PI*2);
 ctx.fill();
 
 // गुस्से और डर वाली भौंहें
@@ -62,10 +64,10 @@ ctx.strokeStyle="#111";
 ctx.lineWidth=3;
 ctx.beginPath();
 
-ctx.moveTo(headX-15,headY+bounce-(scared?20:14));
+ctx.moveTo(headX-15,headY+bounce-jump-(scared?20:14));
 ctx.lineTo(headX-3,headY+bounce-9);
 
-ctx.moveTo(headX+15,headY+bounce-(scared?20:14));
+ctx.moveTo(headX+15,headY+bounce-jump-(scared?20:14));
 ctx.lineTo(headX+3,headY+bounce-9);
 
 ctx.stroke();
