@@ -21,7 +21,7 @@ let x=50,step=0;
   function animate(){
 ctx.clearRect(0,0,600,350);
     let fallPhase=step%100;
-let fall=(fallPhase>55&&fallPhase<75)?Math.sin((fallPhase-55)/20*Math.PI/2):0;
+let fall=fallPhase<55?0:fallPhase<65?Math.sin((fallPhase-55)/10*Math.PI/2):fallPhase<85?1:fallPhase<95?Math.cos((fallPhase-85)/10*Math.PI/2):0;
 
 // आसमान
 ctx.fillStyle="#87ceeb";
