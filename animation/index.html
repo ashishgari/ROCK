@@ -47,7 +47,6 @@ ctx.lineWidth=5;
 ctx.beginPath();
 ctx.arc(headX,headY+bounce-jump,25,0,Math.PI*2);
 ctx.stroke();
-    let reaction=Math.floor(step/20)%3;
     let mouthSize=6+Math.abs(Math.sin(step*2))*3;
 let laugh=reaction===0;
     let scared=reaction===2;
