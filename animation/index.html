@@ -70,6 +70,12 @@ ctx.lineTo(headX+3,headY+bounce-9);
 
 ctx.stroke();
     let eyeMove=Math.sin(step*2)*2;
+    if(scared){
+ctx.fillStyle="#00aaff";
+ctx.beginPath();
+ctx.arc(headX+29,headY+bounce-12,4,0,Math.PI*2);
+ctx.fill();
+    }
 
 // आँखों की पुतलियाँ
 ctx.fillStyle="#111";
