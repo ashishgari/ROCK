@@ -72,21 +72,20 @@ let laugh=reaction===0;
 // हैरानी वाली बड़ी आँखें
 ctx.fillStyle="#fff";
 ctx.beginPath();
-ctx.arc(headX-8+turnFace*8,headY+bounce-jump+(reaction===2?5:0)-5,(scared?10:(reaction===1?8:6))*blink*(1-turnFace*0.45),0,Math.PI*2);
-ctx.arc(headX+8-turnFace*8,headY+bounce-jump+(reaction===2?5:0)-5,(scared?10:(reaction===1?8:6))*blink*(1-turnFace*0.9),0,Math.PI*2);
+ctx.arc(headX-8+turnFace*8,headY+bounce-jump+(reaction===2?5:0)-5,(scared?10:(reaction===1?8:6))*blink*(1-turnFace*0.65),0,Math.PI*2);
+
+ctx.arc(headX+8-turnFace*8,headY+bounce-jump+(reaction===2?5:0)-5,(scared?10:(reaction===1?8:6))*blink*(1-turnFace),0,Math.PI*2);
 ctx.fill();
 
 // गुस्से और डर वाली भौंहें
 ctx.strokeStyle="#111";
 ctx.lineWidth=3;
 ctx.beginPath();
-
 ctx.moveTo(headX-15+turnFace*8,headY+bounce-jump+(reaction===2?5:0)-(scared?20:14));
 ctx.lineTo(headX-3+turnFace*8,headY+bounce-jump+(reaction===2?5:0)-9);
 
 ctx.moveTo(headX+15-turnFace*8,headY+bounce-jump+(reaction===2?5:0)-(scared?20:14));
 ctx.lineTo(headX+3-turnFace*8,headY+bounce-jump+(reaction===2?5:0)-9);
-
 ctx.stroke();
     let eyeMove=(fallPhase>=114&&fallPhase<130)?Math.sin(step*1.5)*3:(reaction===2?0:Math.sin(step*2)*2)+(fall>0.9?Math.sin(step*2)*2:0);
     
