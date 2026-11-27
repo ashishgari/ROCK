@@ -121,26 +121,28 @@ ctx.fill();
 
 
 
-// शरीर
+// शरीर और कमर का टर्न
+let bodyTurn=turnFace*8;
+
 ctx.beginPath();
-ctx.moveTo(headX,145+bounce);
+ctx.moveTo(headX+bodyTurn,145+bounce);
 ctx.lineTo(headX,220+bounce);
 ctx.stroke();
-
-// हाथों का डांस
-    let armShake=comedyWalk?Math.sin(step*2)*12:Math.sin(step*3)*1;
+// हाथों का डांस और साइड टर्न
+let armShake=comedyWalk?Math.sin(step*2)*12:Math.sin(step*3)*1;
 let walkArm=comedyWalk?Math.sin(step*2)*18:0;
-    let armSlip=(step%100>40&&step%100<55)?Math.sin((step%100-40)/15*Math.PI):0;
+let armSlip=(step%100>40&&step%100<55)?Math.sin((step%100-40)/15*Math.PI):0;
 
+let armTurn=turnFace*18;
 
 ctx.beginPath();
 ctx.lineWidth=5;
 
-ctx.moveTo(headX,160);
-ctx.lineTo(fall>0.9||(fallPhase>=114&&fallPhase<130)?headX-15+Math.sin(step*4)*3:headX-35+armShake+walkArm-armSlip*20,fall>0.9||(fallPhase>=114&&fallPhase<130)?135+Math.sin(step*4)*3:175+walkArm-armSlip*20);
+ctx.moveTo(headX+bodyTurn,160);
+ctx.lineTo(headX-35+armShake+walkArm-armSlip*20+armTurn,175+walkArm-armSlip*20);
 
-ctx.moveTo(headX,160);
-ctx.lineTo(headX+35-armShake-walkArm+armSlip*20,175-walkArm-armSlip*20);
+ctx.moveTo(headX+bodyTurn,160);
+ctx.lineTo(headX+35-armShake-walkArm+armSlip*20-armTurn,175-walkArm-armSlip*20);
 
 ctx.stroke();
 
@@ -155,15 +157,21 @@ let liftRight=calmStand?0:comedyWalk?Math.max(0,-Math.sin(step*2))*12:Math.max(0
     let slipPhase=step%100;
 let slip=(slipPhase>40&&slipPhase<55)?Math.sin((slipPhase-40)/15*Math.PI):0;
 
+// पैर और साइड टर्न
+let legTurn=turnFace;
+
+ctx.beginPath();
+ctx.lineWidth=6;
+
 // बायाँ पैर
-ctx.moveTo(headX-5,220+bounce);
-ctx.lineTo(headX-20,245+bounce-liftLeft);
-ctx.lineTo(headX-20+swingLeg-slip*25,270-liftLeft);
+ctx.moveTo(headX-5+legTurn*5,220+bounce);
+ctx.lineTo(headX-20+legTurn*15,245+bounce-liftLeft);
+ctx.lineTo(headX-20+swingLeg-slip*25+legTurn*15,270-liftLeft);
 
 // दायाँ पैर
-ctx.moveTo(headX+5,220+bounce);
-ctx.lineTo(headX+20,245+bounce-liftRight);
-ctx.lineTo(headX+20-swingLeg+slip*25,270-liftRight);
+ctx.moveTo(headX+5-legTurn*5,220+bounce);
+ctx.lineTo(headX+20-legTurn*15,245+bounce-liftRight);
+ctx.lineTo(headX+20-swingLeg+slip*25-legTurn*15,270-liftRight);
 
 ctx.stroke();
 ctx.restore();
