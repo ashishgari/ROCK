@@ -27,6 +27,7 @@ let comedyWalk=fallPhase>=145&&fallPhase<160;
 let walkMove=comedyWalk?Math.sin(step*2)*2:0;
     let turnProgress=turnPhase?(fallPhase-130)/15:0;
 let turnScale=1-Math.sin(turnProgress*Math.PI)*0.75;
+    let turnFace=Math.sin(turnProgress*Math.PI);
 // आसमान
 ctx.fillStyle="#87ceeb";
 ctx.fillRect(0,0,600,350);
@@ -52,6 +53,7 @@ let jump=(reaction===2)?Math.abs(Math.sin(step*0.5))*4:0;
     ctx.save();
 ctx.translate(headX,220+bounce);
 ctx.rotate(fall*Math.PI/2);
+    
     ctx.scale(turnScale,1);
     ctx.translate(-headX,-220);
     
@@ -71,7 +73,7 @@ let laugh=reaction===0;
 ctx.fillStyle="#fff";
 ctx.beginPath();
 ctx.arc(headX-8,headY+bounce-jump+(reaction===2?5:0)-5,(scared?10:(reaction===1?8:6))*blink,0,Math.PI*2);
-ctx.arc(headX+8,headY+bounce-jump+(reaction===2?5:0)-5,(scared?10:(reaction===1?8:6))*blink,0,Math.PI*2);
+ctx.arc(headX+8-turnFace*6,headY+bounce-jump+(reaction===2?5:0)-5,(scared?10:(reaction===1?8:6))*blink*(1-turnFace*0.8),0,Math.PI*2);
 ctx.fill();
 
 // गुस्से और डर वाली भौंहें
@@ -100,7 +102,7 @@ ctx.fillStyle="#111";
 ctx.globalAlpha=blink;
 ctx.beginPath();
 ctx.arc(headX-8+eyeMove,headY+bounce-jump+(reaction===2?5:0)+(reaction===2?0:-5),3,0,Math.PI*2);
-ctx.arc(headX+8+eyeMove,headY+bounce-jump+(reaction===2?5:0)+(reaction===2?0:-5),3,0,Math.PI*2);
+ctx.arc(headX+8+eyeMove-turnFace*6,headY+bounce-jump+(reaction===2?5:0)+(reaction===2?0:-5),3*(1-turnFace*0.8),0,Math.PI*2);
 ctx.fill();
     ctx.globalAlpha=1;
 
