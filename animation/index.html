@@ -123,6 +123,7 @@ ctx.stroke();
 
 // हाथों का डांस
     let armShake=comedyWalk?Math.sin(step*2)*12:Math.sin(step*3)*1;
+let walkArm=comedyWalk?Math.sin(step*2)*18:0;
     let armSlip=(step%100>40&&step%100<55)?Math.sin((step%100-40)/15*Math.PI):0;
 
 
@@ -130,10 +131,10 @@ ctx.beginPath();
 ctx.lineWidth=5;
 
 ctx.moveTo(headX,160);
-ctx.lineTo(fall>0.9||(fallPhase>=114&&fallPhase<130)?headX-15+Math.sin(step*4)*3:headX-35+armShake-armSlip*20,fall>0.9||(fallPhase>=114&&fallPhase<130)?135+Math.sin(step*4)*3:175+dance*30-armSlip*20);
+ctx.lineTo(fall>0.9||(fallPhase>=114&&fallPhase<130)?headX-15+Math.sin(step*4)*3:headX-35+armShake-armSlip*20,fall>0.9||(fallPhase>=114&&fallPhase<130)?135+Math.sin(step*4)*3:175+walkArm-armSlip*20
 
 ctx.moveTo(headX,160);
-ctx.lineTo(headX+35-armShake+armSlip*20,175-dance*30-armSlip*20);
+ctx.lineTo(headX+35-armShake+armSlip*20,175-walkArm-armSlip*20);
 
 ctx.stroke();
 
