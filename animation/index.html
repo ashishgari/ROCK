@@ -72,8 +72,8 @@ let laugh=reaction===0;
 // हैरानी वाली बड़ी आँखें
 ctx.fillStyle="#fff";
 ctx.beginPath();
-ctx.arc(headX-8,headY+bounce-jump+(reaction===2?5:0)-5,(scared?10:(reaction===1?8:6))*blink,0,Math.PI*2);
-ctx.arc(headX+8-turnFace*6,headY+bounce-jump+(reaction===2?5:0)-5,(scared?10:(reaction===1?8:6))*blink*(1-turnFace*0.8),0,Math.PI*2);
+ctx.arc(headX-8+turnFace*6,headY+bounce-jump+(reaction===2?5:0)-5,(scared?10:(reaction===1?8:6))*blink*(1-turnFace*0.8),0,Math.PI*2);
+ctx.arc(headX+8-turnFace*6,headY+bounce-jump+(reaction===2?5:0)-5,(scared?10:(reaction===1?8:6))*blink*(1-turnFace),0,Math.PI*2);
 ctx.fill();
 
 // गुस्से और डर वाली भौंहें
@@ -112,9 +112,9 @@ ctx.fillStyle="#111";
 ctx.beginPath();
 
 if(laugh){
-ctx.ellipse(headX,headY+bounce-jump+(reaction===2?5:0)+9,10,5,0,0,Math.PI*2);
+ctx.ellipse(headX+turnFace*7,headY+bounce-jump+(reaction===2?5:0)+9,10*(1-turnFace*0.3),5,0,0,Math.PI*2);
 }else{
-ctx.ellipse(headX,headY+bounce-jump +(reaction===2?5:0)+10,mouthSize,mouthSize+2,0,0,Math.PI*2);
+ctx.ellipse(headX+turnFace*7,headY+bounce-jump +(reaction===2?5:0)+10,mouthSize*(1-turnFace*0.3),mouthSize+2,0,0,Math.PI*2);
 }
 
 ctx.fill();
