@@ -42,7 +42,7 @@ let headX=200;
     
 let headY=120;
     let calmStand=fallPhase>=78&&fallPhase<130;
-let dance=comedyWalk?-Math.sin(step*2):calmStand?0:Math.sin(step*3);
+let dance=comedyWalk?-Math.sin(step*2)*0.6:calmStand?0:Math.sin(step*3);
 let bounce=calmStand?0:Math.abs(Math.sin(step*3))*3;
     let reaction=Math.floor(step/20)%3;
 let jump=(reaction===2)?Math.abs(Math.sin(step*0.5))*4:0;
