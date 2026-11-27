@@ -21,7 +21,7 @@ let x=50,step=0;
   function animate(){
 ctx.clearRect(0,0,600,350);
     let fallPhase=step%100;
-let fall=fallPhase<55?0:fallPhase<65?Math.sin((fallPhase-55)/10*Math.PI/2):fallPhase<78?1:fallPhase<85?1-0.9*Math.sin((fallPhase-78)/7*Math.PI/2):fallPhase<90?0.1+0.9*Math.sin((fallPhase-85)/5*Math.PI/2):fallPhase<98?Math.cos((fallPhase-90)/8*Math.PI/2):0;
+let fall=fallPhase<35?0:fallPhase<42?Math.sin((fallPhase-35)/7*Math.PI/2):fallPhase<50?1:fallPhase<55?1-0.9*Math.sin((fallPhase-50)/5*Math.PI/2):fallPhase<60?0.1+0.9*Math.sin((fallPhase-55)/5*Math.PI/2):fallPhase<70?1:fallPhase<78?Math.cos((fallPhase-70)/8*Math.PI/2):0;
 
 // आसमान
 ctx.fillStyle="#87ceeb";
@@ -38,8 +38,9 @@ let headX=200;
    headX+=shake; 
     headX+=slipMove;
 let headY=120;
-    let dance=Math.sin(step*3);
-let bounce=Math.abs(Math.sin(step*3))*3;
+    let calmStand=fallPhase>=78&&fallPhase<83;
+let dance=calmStand?0:Math.sin(step*3);
+let bounce=calmStand?0:Math.abs(Math.sin(step*3))*3;
     let reaction=Math.floor(step/20)%3;
 let jump=(reaction===2)?Math.abs(Math.sin(step*0.5))*4:0;
     ctx.save();
@@ -78,7 +79,7 @@ ctx.moveTo(headX+15,headY+bounce-jump+(reaction===2?5:0)-(scared?20:14));
 ctx.lineTo(headX+3,headY+bounce-jump+(reaction===2?5:0)-9);
 
 ctx.stroke();
-    let eyeMove=(fallPhase>=15&&fallPhase<30)?Math.sin(step*1.5)*2:(reaction===2?0:Math.sin(step*2)*2)+(fall>0.9?Math.sin(step*2)*2:0);
+    let eyeMove=(fallPhase>=83&&fallPhase<90)?Math.sin(step*1.5)*3:(reaction===2?0:Math.sin(step*2)*2)+(fall>0.9?Math.sin(step*2)*2:0);
     
     if(scared){
 ctx.fillStyle="#00aaff";
@@ -126,7 +127,7 @@ ctx.beginPath();
 ctx.lineWidth=5;
 
 ctx.moveTo(headX,160);
-ctx.lineTo(fall>0.9||fallPhase<15?headX-15+Math.sin(step*12)*3:headX-35+armShake-armSlip*20,fall>0.9||fallPhase<15?135+Math.sin(step*12)*3:175+dance*30-armSlip*20);
+ctx.lineTo(fall>0.9||(fallPhase>=83&&fallPhase<90)?headX-15+Math.sin(step*4)*3:headX-35+armShake-armSlip*20,fall>0.9||(fallPhase>=83&&fallPhase<90)?135+Math.sin(step*4)*3:175+dance*30-armSlip*20);
 
 ctx.moveTo(headX,160);
 ctx.lineTo(headX+35-armShake+armSlip*20,175-dance*30-armSlip*20);
@@ -137,7 +138,7 @@ ctx.stroke();
 ctx.beginPath();
 ctx.lineWidth=6;
 
-let comedyWalk=fallPhase>=30&&fallPhase<40;
+    let comedyWalk=fallPhase>=90&&fallPhase<100;
 let swingLeg=comedyWalk?Math.sin(step*2)*10:Math.sin(step*3)*12;
 let liftLeft=comedyWalk?Math.max(0,Math.sin(step*2))*12:Math.max(0,dance)*18;
 let liftRight=comedyWalk?Math.max(0,-Math.sin(step*2))*12:Math.max(0,-dance)*18;
