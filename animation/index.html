@@ -63,7 +63,7 @@ ctx.rotate(fall*Math.PI/2);
 ctx.strokeStyle="#111";
 ctx.lineWidth=5;
 ctx.beginPath();
-ctx.arc(headX,headY+bounce-jump,25,0,Math.PI*2);
+ctx.ellipse(headX,headY+bounce-jump,25-10*turnFace,25,0,0,Math.PI*2);
 ctx.stroke();
     let mouthSize=6+Math.abs(Math.sin(step*2))*3;
 let laugh=reaction===0;
