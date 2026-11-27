@@ -63,12 +63,15 @@ ctx.rotate(fall*Math.PI/2);
 ctx.strokeStyle="#111";
 ctx.lineWidth=5;
 ctx.beginPath();
-ctx.ellipse(headX,headY+bounce-jump,25-10*turnFace,25,0,0,Math.PI*2);
+ctx.arc(headX,headY+bounce-jump,25,0,Math.PI*2);
 ctx.stroke();
     let mouthSize=6+Math.abs(Math.sin(step*2))*3;
 let laugh=reaction===0;
     let scared=reaction===2;
     let blink=(step%35>33)?0.15:1;
+    let eyeMove=(fallPhase>=114&&fallPhase<130)
+?Math.sin(step*1.5)*3
+:(reaction===2?0:Math.sin(step*2)*2)+(fall>0.9?Math.sin(step*2)*2:0);
 // हैरानी वाली बड़ी आँखें
 ctx.fillStyle="#fff";
 ctx.beginPath();
@@ -87,7 +90,7 @@ ctx.lineTo(headX-3+turnFace*8,headY+bounce-jump+(reaction===2?5:0)-9);
 ctx.moveTo(headX+15-turnFace*8,headY+bounce-jump+(reaction===2?5:0)-(scared?20:14));
 ctx.lineTo(headX+3-turnFace*8,headY+bounce-jump+(reaction===2?5:0)-9);
 ctx.stroke();
-    let eyeMove=(fallPhase>=114&&fallPhase<130)?Math.sin(step*1.5)*3:(reaction===2?0:Math.sin(step*2)*2)+(fall>0.9?Math.sin(step*2)*2:0);
+    
     
     if(scared){
 ctx.fillStyle="#00aaff";
