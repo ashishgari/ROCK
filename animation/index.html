@@ -72,9 +72,9 @@ let laugh=reaction===0;
 // हैरानी वाली बड़ी आँखें
 ctx.fillStyle="#fff";
 ctx.beginPath();
-ctx.arc(headX-8+turnFace*5,headY+bounce-jump+(reaction===2?5:0)-5,(scared?10:(reaction===1?8:6))*blink*(1-turnFace*0.65),0,Math.PI*2);
+ctx.arc(headX-8+eyeMove+turnFace*5,headY+bounce-jump+(reaction===2?5:0)-5,(scared?10:(reaction===1?8:6))*blink*(1-turnFace*0.65),0,Math.PI*2);
 
-ctx.arc(headX+8-turnFace*8,headY+bounce-jump+(reaction===2?5:0)-5,(scared?10:(reaction===1?8:6))*blink*(1-turnFace),0,Math.PI*2);
+ctx.arc(headX+8+eyeMove-turnFace*8,headY+bounce-jump+(reaction===2?5:0)-5,(scared?10:(reaction===1?8:6))*blink*(1-turnFace),0,Math.PI*2);
 ctx.fill();
 
 // गुस्से और डर वाली भौंहें
