@@ -22,7 +22,7 @@ let x=50,step=0;
 ctx.clearRect(0,0,600,350);
     let fallPhase=step%160;
 let fall=fallPhase<35?0:fallPhase<42?Math.sin((fallPhase-35)/7*Math.PI/2):fallPhase<50?1:fallPhase<55?1-0.9*Math.sin((fallPhase-50)/5*Math.PI/2):fallPhase<60?0.1+0.9*Math.sin((fallPhase-55)/5*Math.PI/2):fallPhase<70?1:fallPhase<78?Math.cos((fallPhase-70)/8*Math.PI/2):0;
-    let turnPhase=fallPhase>=130&&fallPhase<145;
+    let turnScale=1-Math.sin(turnProgress*Math.PI)*0.25;
 let comedyWalk=fallPhase>=145&&fallPhase<160;
 let walkMove=comedyWalk?Math.sin(step*2)*2:0;
     let turnProgress=turnPhase?(fallPhase-130)/15:0;
