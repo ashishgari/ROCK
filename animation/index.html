@@ -119,12 +119,12 @@ ctx.fill();
 }
 ctx.fillStyle="#111";
 ctx.beginPath();
-
 if(laugh){
 ctx.ellipse(headX+turnFace*10,headY+bounce-jump+(reaction===2?5:0)+9,8*(1-turnFace*0.2),5,0,0,Math.PI*2);
 }else{
-ctx.ellipse(headX+turnFace*10,headY+bounce-jump +(reaction===2?5:0)+10,mouthSize*(1-turnFace*0.4),mouthSize+2,0,0,Math.PI*2);
-}
+ctx.ellipse(headX+turnFace*10,headY+bounce-jump+(reaction===2?5:0)+10,mouthSize*(1-turnFace*0.4),(mouthSize+2)*(1-turnFace*0.5),0,0,Math.PI*2);
+            }
+
 
 ctx.fill();
 
